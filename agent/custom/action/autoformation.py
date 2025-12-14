@@ -189,7 +189,7 @@ class AutoFormation(CustomAction):
     }
     NAME_CONFUSION_MAP: Dict[str, List[str]] = {
         "士": ["土"],
-        "郃": ["部"],
+        "郃": ["部", "邻"],
     }
     TARGET_RECO_ROIS: List[Tuple[int, int, int, int]] = [
         (27, 1013, 136, 61),
@@ -395,6 +395,17 @@ class AutoFormation(CustomAction):
         cy = box[1] + oy + (box[3] + oh) // 2
         context.tasker.controller.post_click(cx, cy).wait()
 
+    def _stop_task(self, context: Context):
+        """请求停止整个任务，避免后续节点继续运行。"""
+        try:
+            setattr(context, "stop", True)
+            tasker = getattr(context, "tasker", None)
+            if tasker is not None and not tasker.stopping:
+                tasker.post_stop().wait()
+            logger.info("已请求停止整个任务")
+        except Exception:
+            logger.exception("请求停止任务时异常")
+
     def _remove_old_first(self, context: Context):
         logger.info("移除原一号位")
         result = context.run_task("自动编队-移除一号位")
@@ -517,6 +528,7 @@ class AutoFormation(CustomAction):
             self._scroll_once(context)
             attempts += 1
         logger.error(f"未找到目标密探: {target_name}")
+        self._stop_task(context)
         return False
 
     def _find_and_click(
@@ -884,6 +896,6 @@ class DiscChecker(CustomAction):
                     logger.info(f"{idx + 1}号位({oper_name})命盘已符合作业要求")
 
             if idx < opers_num - 1:
-                self._run_task(context, self.NEXT_TASK)
+                self._run_task(context, self.NEXT_TASK, wait_ms=1000)
 
         return CustomAction.RunResult(success=overall_success)
