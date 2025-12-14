@@ -1,7 +1,5 @@
 {
   "据点买东西启动": {
-    "recognition": { "type": "DirectHit", "param": {} },
-    "action": { "type": "DoNothing", "param": {} },
     "focus": "开始据点商人购物",
     "next": [
       "进入行脚商人",
@@ -19,7 +17,6 @@
         "green_mask": true
       }
     },
-    "action": { "type": "DoNothing", "param": {} },
     "next": [
       "据点购买-OCR找到洛阳据点",
       "据点购买-TM找到洛阳据点",
