@@ -1,4 +1,4 @@
-maafw==5.2.3
+maafw==5.2.6
 loguru
 pandas
 openpyxl
