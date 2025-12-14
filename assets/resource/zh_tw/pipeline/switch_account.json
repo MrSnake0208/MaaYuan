@@ -42,8 +42,9 @@
     "recognition": {
       "type": "OCR",
       "param": {
-        "expected": "切換",
-        "roi": [560, 63, 148, 115]
+        "expected": "切换",
+        "replace": ["換", "换"],
+        "roi": [518, 69, 187, 132]
       }
     },
     "action": {
@@ -73,7 +74,7 @@
       "type": "OCR",
       "param": {
         "expected": "登",
-        "roi": [273, 666, 171, 81]
+        "roi": [260, 664, 199, 129]
       }
     },
     "action": {
