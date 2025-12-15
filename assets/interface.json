@@ -222,6 +222,65 @@
       "entry": "地宫助手启动",
       "description": "自动爬地宫目前为试用版，开启时，会优先把洛阳铲用于打未通关的关卡，已全通则进行扫荡\n默认使用主队伍进行战斗，遇到禁用属性提示时会自动切换为备用队。目前观察到的禁用属性组合为：火阴/水阳/地风，请提前配好不同属性的队伍。\n\n默认会把10次都扫掉，次数不足时自动停止\n\n自动雀部解密，仅在开启自动领地宫奖励时，在任务列表中识别到该任务未做完时才执行",
       "option": ["自动爬地宫", "要扫荡的层数", "自动领地宫奖励"]
+    },
+    {
+      "name": "🔨 心纸营建",
+      "entry": "心纸营建启动",
+      "option": [
+        "心纸营建自动历险路线",
+        "心纸营建最大派遣时间",
+        "心纸营建活动版本"
+      ],
+      "advanced": ["自定义打造材料数量", "自定义打造家具数量"],
+      "description": "开启【进行家具打造】时将会根据选项打造对应的材料10次和家具1个，可自定义数量（家具选项堆在最下面，可能需要鼠标滚轮滚动一下才能看到）",
+      "pipeline_override": {
+        "心纸营建历险-开始": {
+          "template": "temp/aipin-furniture.png"
+        },
+        "心纸营建历险-选人界面": {
+          "template": "temp/tongqin-selectagent.png"
+        },
+        "心纸工坊-主题check": {
+          "expected": "才"
+        },
+        "心纸工坊-主题选择": {
+          "expected": "才"
+        }
+      }
+    },
+    {
+      "name": "🔶 日常收尾",
+      "entry": "相见互动启动",
+      "default_check": true,
+      "description": "目前包括：\n\n1.相见互动10次\n2.家具互动\n3.首位密探升级（可选）\n4.密探每日分享\n5.每日密探赠礼（可选）\n6.小道消息第三次(可选)\n7.收取密探特训奖励（可选）",
+      "option": [
+        "首位密探升级",
+        "每日密探送礼",
+        "送礼跳过信赖值需要转换的密探",
+        "收尾前做小道消息",
+        "领取密探特训奖励"
+      ],
+      "pipeline_override": {
+        "相见互动结束": {
+          "next": ["家具互动启动"]
+        },
+        "等待家具互动结束": {
+          "next": ["密探升级启动", "每日分享启动"]
+        },
+        "前往收集_小道消息": {
+          "next": ["new不吃鸟食", "检测点击_前往收集_小道消息成功"]
+        }
+      }
+    },
+    {
+      "name": "🔍 楼主查岗",
+      "entry": "楼主查岗启动",
+      "description": "自动领取楼主查岗奖励，可选是否自动购买天机符传x1（需提前解锁二级密码）以及是否领取100体力。",
+      "option": ["购买天机符传x1", "领取100体力"]
+    },
+    {
+      "name": "💤 关闭游戏",
+      "entry": "关闭游戏版本"
     }
   ],
   "option": {
@@ -1946,7 +2005,7 @@
     },
     "铜钱历练级别": {
       "type": "select",
-      "default_case": "王庭",
+      "default_case": "王庭贸易（最高）",
       "cases": [
         {
           "name": "巨额贸易",
@@ -2103,7 +2162,7 @@
     },
     "经验历练级别": {
       "type": "select",
-      "default_case": "绝境",
+      "default_case": "绝境历练（最高）",
       "cases": [
         {
           "name": "新手历练",
@@ -2559,6 +2618,7 @@
     "自动爬地宫-主队伍": {
       "type": "select",
       "description": "【火阴】【水阳】【地风】属性的角色会被同时禁用，请合理配置队伍",
+      "default_case": "队伍2",
       "cases": [
         {
           "name": "队伍1",
@@ -2589,6 +2649,7 @@
     "自动爬地宫-备用队": {
       "type": "select",
       "description": "【火阴】【水阳】【地风】属性的角色会被同时禁用，请合理配置队伍，备用队的属性不要和主队伍重复",
+      "default_case": "队伍3",
       "cases": [
         {
           "name": "队伍1",
@@ -2652,6 +2713,164 @@
         }
       ]
     },
+    "要扫荡的层数": {
+      "type": "select",
+      "default_case": "58",
+      "cases": [
+        {
+          "name": "59",
+          "pipeline_override": {
+            "找到指定地宫层数": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd59.png"
+                }
+              }
+            },
+            "找到指定地宫层数-如鸢": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd59_ry.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "58",
+          "pipeline_override": {
+            "找到指定地宫层数": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd58.png"
+                }
+              }
+            },
+            "找到指定地宫层数-如鸢": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd58_ry.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "57",
+          "pipeline_override": {
+            "找到指定地宫层数": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd57.png"
+                }
+              }
+            },
+            "找到指定地宫层数-如鸢": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd57_ry.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "54",
+          "pipeline_override": {
+            "找到指定地宫层数": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd54.png"
+                }
+              }
+            },
+            "找到指定地宫层数-如鸢": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd54_ry.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "52",
+          "pipeline_override": {
+            "找到指定地宫层数": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd52.png"
+                }
+              }
+            },
+            "找到指定地宫层数-如鸢": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd52_ry.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "46",
+          "pipeline_override": {
+            "找到指定地宫层数": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd46.png"
+                }
+              }
+            },
+            "找到指定地宫层数-如鸢": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd46_ry.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "44",
+          "pipeline_override": {
+            "找到指定地宫层数": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd44.png"
+                }
+              }
+            },
+            "找到指定地宫层数-如鸢": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd44_ry.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "38",
+          "pipeline_override": {
+            "找到指定地宫层数": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd38.png"
+                }
+              }
+            },
+            "找到指定地宫层数-如鸢": {
+              "recognition": {
+                "param": {
+                  "template": "deepdungeon/dd38_ry.png"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "自动领地宫奖励": {
       "type": "switch",
       "cases": [
@@ -2698,6 +2917,1435 @@
           }
         }
       ]
+    },
+    "心纸营建自动历险路线": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "材料搜寻",
+          "pipeline_override": {
+            "心纸营建历险-开始": {
+              "next": ["心纸营建历险-材料搜寻"]
+            },
+            "心纸营建历险-开始ocr": {
+              "next": ["心纸营建历险-材料搜寻"]
+            },
+            "心纸营建历险-派遣中": {
+              "enabled": true
+            },
+            "心纸营建历险-佛脚派遣中": {
+              "enabled": false
+            }
+          },
+          "option": ["心纸营建材料搜寻难度"]
+        },
+        {
+          "name": "佛脚获取",
+          "pipeline_override": {
+            "心纸营建历险-开始": {
+              "next": ["心纸营建历险-佛脚获取"]
+            },
+            "心纸营建历险-开始ocr": {
+              "next": ["心纸营建历险-佛脚获取"]
+            },
+            "心纸营建历险-派遣中": {
+              "enabled": false
+            },
+            "心纸营建历险-佛脚派遣中": {
+              "enabled": true
+            }
+          }
+        }
+      ]
+    },
+    "心纸营建材料搜寻难度": {
+      "type": "select",
+      "default_case": "5（最下面）",
+      "cases": [
+        {
+          "name": "5（最下面）",
+          "pipeline_override": {
+            "心纸营建历险-派遣中": {
+              "recognition": {
+                "param": {
+                  "roi": [573, 1139, 94, 58]
+                }
+              }
+            },
+            "心纸营建历险-收取奖励": {
+              "recognition": {
+                "param": {
+                  "roi": [573, 1139, 94, 58]
+                }
+              }
+            },
+            "心纸营建历险-选择关卡": {
+              "action": {
+                "param": {
+                  "target": [606, 1153, 28, 28]
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "4",
+          "pipeline_override": {
+            "心纸营建历险-派遣中": {
+              "recognition": {
+                "param": {
+                  "roi": [573, 939, 94, 58]
+                }
+              }
+            },
+            "心纸营建历险-收取奖励": {
+              "recognition": {
+                "param": {
+                  "roi": [573, 939, 94, 58]
+                }
+              }
+            },
+            "心纸营建历险-选择关卡": {
+              "action": {
+                "param": {
+                  "target": [606, 953, 28, 28]
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "3",
+          "pipeline_override": {
+            "心纸营建历险-派遣中": {
+              "recognition": {
+                "param": {
+                  "roi": [573, 739, 94, 58]
+                }
+              }
+            },
+            "心纸营建历险-收取奖励": {
+              "recognition": {
+                "param": {
+                  "roi": [573, 739, 94, 58]
+                }
+              }
+            },
+            "心纸营建历险-选择关卡": {
+              "action": {
+                "param": {
+                  "target": [606, 753, 28, 28]
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "2",
+          "pipeline_override": {
+            "心纸营建历险-派遣中": {
+              "recognition": {
+                "param": {
+                  "roi": [573, 539, 94, 58]
+                }
+              }
+            },
+            "心纸营建历险-收取奖励": {
+              "recognition": {
+                "param": {
+                  "roi": [573, 539, 94, 58]
+                }
+              }
+            },
+            "心纸营建历险-选择关卡": {
+              "recognition": {
+                "param": {
+                  "target": [606, 553, 28, 28]
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "1（最上面）",
+          "pipeline_override": {
+            "心纸营建历险-派遣中": {
+              "recognition": {
+                "param": {
+                  "roi": [573, 339, 94, 58]
+                }
+              }
+            },
+            "心纸营建历险-收取奖励": {
+              "recognition": {
+                "param": {
+                  "roi": [573, 339, 94, 58]
+                }
+              }
+            },
+            "心纸营建历险-选择关卡": {
+              "action": {
+                "param": {
+                  "target": [600, 351, 38, 38]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "心纸营建活动版本": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "隆地冬",
+          "pipeline_override": {
+            "心纸营建历险-开始": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-furniture.png"
+                }
+              }
+            },
+            "心纸营建历险-选人界面": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-selectagent.png"
+                }
+              }
+            },
+            "心纸营建历险-派遣结束": {
+              "recognition": {
+                "type": "TemplateMatch",
+                "param": {
+                  "template": "temp/ldd-check.png",
+                  "roi": [555, 712, 154, 155]
+                }
+              }
+            },
+            "心纸营建历险-进入宝库": {
+              "recognition": {
+                "type": "TemplateMatch",
+                "param": {
+                  "template": "temp/ldd-check.png",
+                  "roi": [555, 712, 154, 155]
+                }
+              }
+            },
+            "心纸营建历险-切换宝库": {
+              "recognition": {
+                "param": {
+                  "expected": "多"
+                }
+              }
+            }
+          },
+          "option": ["隆地冬指定密探", "进行家具打造"]
+        },
+        {
+          "name": "游春集",
+          "pipeline_override": {
+            "心纸营建历险-开始": {
+              "recognition": {
+                "param": {
+                  "template": "temp/spring-furniture.png"
+                }
+              }
+            }
+          },
+          "option": ["游春集指定密探", "进行家具打造"]
+        },
+        {
+          "name": "灯火夜街",
+          "pipeline_override": {
+            "心纸营建历险-开始": {
+              "recognition": {
+                "param": {
+                  "template": "temp/yejie-furniture.png"
+                }
+              }
+            },
+            "心纸营建历险-选人界面": {
+              "recognition": {
+                "param": {
+                  "template": "temp/yejie-selectagent.png"
+                }
+              }
+            }
+          },
+          "option": ["灯火夜街指定密探", "进行家具打造"]
+        },
+        {
+          "name": "通勤绝路",
+          "pipeline_override": {
+            "心纸营建历险-开始": {
+              "recognition": {
+                "param": {
+                  "template": "temp/tongqin-furniture.png"
+                }
+              }
+            },
+            "心纸营建历险-选人界面": {
+              "recognition": {
+                "param": {
+                  "template": "temp/tongqin-selectagent.png"
+                }
+              }
+            }
+          },
+          "option": ["通勤绝路指定密探", "进行家具打造"]
+        },
+        {
+          "name": "爱拼才会赢",
+          "pipeline_override": {
+            "心纸营建历险-开始": {
+              "recognition": {
+                "param": {
+                  "template": "temp/aipin-furniture.png"
+                }
+              }
+            },
+            "心纸营建历险-选人界面": {
+              "recognition": {
+                "param": {
+                  "template": "temp/tongqin-selectagent.png"
+                }
+              }
+            }
+          },
+          "option": ["爱拼才会赢指定密探", "进行家具打造"]
+        }
+      ]
+    },
+    "通勤绝路指定密探": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "返还行动力（需陆逊）",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/luxun.png",
+                  "threshold": 0.75
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "怪诞黑杉、怪诞木块加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-wood.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "怪诞原石、怪诞玉料加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-wool.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "怪诞花岗岩、怪诞石材加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-sand.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "怪诞鸢绒、怪诞羽线加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-snow.png"
+                }
+              }
+            }
+          }
+        },
+
+        {
+          "name": "怪诞铁砂、怪诞陨铁加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/chendeng.png"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "爱拼才会赢指定密探": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "返还行动力",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "agent/yingjian/yanliang.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "香楠木、楠木块加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "agent/yingjian/fengshi.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "水晶矿、水晶原石加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "agent/yingjian/yuanshi.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "青檀枝、青檀皮加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "agent/yingjian/feiyun.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "窖冰、桶冰加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "agent/yingjian/wenchou.png"
+                }
+              }
+            }
+          }
+        },
+
+        {
+          "name": "天然乳胶、染色乳胶加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "agent/yingjian/xiuqiu.png"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "灯火夜街指定密探": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "返还行动力（需张闿）",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/zhangkai.png"
+                }
+              }
+            },
+            "心纸营建历险-翻页后选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/zhangkai.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "原石、玉料加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-wood.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "白藤、藤条加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-wool.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "露珠、霜花加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/chunshan-sand.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "砾砂、砖土加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-snow.png"
+                }
+              }
+            }
+          }
+        },
+
+        {
+          "name": "麻草、熟麻加成（需诸葛诞）",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/zhugedan.png"
+                }
+              }
+            },
+            "心纸营建历险-翻页后选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/zhugedan.png"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "游春集指定密探": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "返还行动力（需董奉）",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/spring-recycle.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "紫竹、紫竹竿加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/chunshan-sand.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "鳞纹木、鳞木材加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-snow.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "白云岩、白云石加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/spring-rock.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "孔雀石、绿矿砂加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-sand.png"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "隆地冬指定密探": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "返还行动力",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-recycle.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "香樟、樟木材加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-wood.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "雪花、雪片加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-snow.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "赤砂、红土加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-sand.png"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "羊毛、羊毛毡加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "temp/longdidong-wool.png"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "进行家具打造": {
+      "type": "switch",
+      "cases": [
+        {
+          "name": "yes",
+          "pipeline_override": {
+            "开启家具打造": {
+              "enabled": true
+            }
+          },
+          "option": ["打造哪个版本的家具"]
+        },
+        {
+          "name": "no",
+          "pipeline_override": {
+            "开启家具打造": {
+              "enabled": false
+            }
+          }
+        }
+      ]
+    },
+    "打造哪个版本的家具": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "隆地冬",
+          "pipeline_override": {
+            "心纸工坊-主题check": {
+              "recognition": {
+                "param": {
+                  "expected": "地冬"
+                }
+              }
+            },
+            "心纸工坊-主题选择": {
+              "recognition": {
+                "param": {
+                  "expected": "地冬"
+                }
+              }
+            }
+          },
+          "option": ["隆地冬-打造材料", "隆地冬-打造家具"]
+        },
+        {
+          "name": "游春集",
+          "pipeline_override": {
+            "心纸工坊-主题check": {
+              "recognition": {
+                "param": {
+                  "expected": "春集"
+                }
+              }
+            },
+            "心纸工坊-主题选择": {
+              "recognition": {
+                "param": {
+                  "expected": "春集"
+                }
+              }
+            }
+          },
+          "option": ["游春集-打造材料", "游春集-打造家具"]
+        },
+        {
+          "name": "灯火夜街",
+          "pipeline_override": {
+            "心纸工坊-主题check": {
+              "recognition": {
+                "param": {
+                  "expected": "火夜"
+                }
+              }
+            },
+            "心纸工坊-主题选择": {
+              "recognition": {
+                "param": {
+                  "expected": "夜"
+                }
+              }
+            }
+          },
+          "option": ["灯火夜街-打造材料", "灯火夜街-打造家具"]
+        },
+        {
+          "name": "通勤绝路",
+          "pipeline_override": {
+            "心纸工坊-主题check": {
+              "recognition": {
+                "param": {
+                  "expected": "通勤"
+                }
+              }
+            },
+            "心纸工坊-主题选择": {
+              "recognition": {
+                "param": {
+                  "expected": "通勤"
+                }
+              }
+            }
+          },
+          "option": ["通勤绝路-打造材料", "通勤绝路-打造家具"]
+        },
+        {
+          "name": "爱拼才会赢",
+          "pipeline_override": {
+            "心纸工坊-主题check": {
+              "recognition": {
+                "param": {
+                  "expected": "才"
+                }
+              }
+            },
+            "心纸工坊-主题选择": {
+              "recognition": {
+                "param": {
+                  "expected": "才"
+                }
+              }
+            }
+          },
+          "option": ["爱拼才会赢-打造材料", "爱拼才会赢-打造家具"]
+        }
+      ]
+    },
+    "隆地冬-打造材料": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "雪片",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "雪"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "红土",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "红"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "樟木材",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "木"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "羊毛毡",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "羊"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "游春集-打造材料": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "紫竹竿",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "紫竹竿"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "鳞木材",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "木材"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "白云石",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "白"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "绿矿砂",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "砂"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "灯火夜街-打造材料": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "夜街玉料",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "玉"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "夜街藤条",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "藤"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "夜街霜花",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "花"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "夜街砖土",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "土"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "夜街熟麻",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "麻"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "通勤绝路-打造材料": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "怪诞羽线",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "羽"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "怪诞石材",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "石"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "怪诞木块",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "木"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "怪诞玉料",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "玉"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "怪诞陨铁",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "陨",
+                  "replace": ["隕", "陨"]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "爱拼才会赢-打造材料": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "楠木块",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "木"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "水晶原石",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "石"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "青檀皮",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "皮"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "桶冰料",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "冰"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "染色乳胶",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "色"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "游春集-打造家具": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "地面",
+          "pipeline_override": {
+            "心纸工坊-选择家具种类": {
+              "recognition": {
+                "param": {
+                  "expected": "地面"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "水面",
+          "pipeline_override": {
+            "心纸工坊-选择家具种类": {
+              "recognition": {
+                "param": {
+                  "expected": "水面"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "隆地冬-打造家具": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "地面",
+          "pipeline_override": {
+            "心纸工坊-选择家具种类": {
+              "recognition": {
+                "param": {
+                  "expected": "地面"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "灯火夜街-打造家具": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "地面",
+          "pipeline_override": {
+            "心纸工坊-选择家具种类": {
+              "recognition": {
+                "param": {
+                  "expected": "地面"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "水面",
+          "pipeline_override": {
+            "心纸工坊-选择家具种类": {
+              "recognition": {
+                "param": {
+                  "expected": "水面"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "通勤绝路-打造家具": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "地面",
+          "pipeline_override": {
+            "心纸工坊-选择家具种类": {
+              "recognition": {
+                "param": {
+                  "expected": "地面"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "水面",
+          "pipeline_override": {
+            "心纸工坊-选择家具种类": {
+              "recognition": {
+                "param": {
+                  "expected": "水面"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "爱拼才会赢-打造家具": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "地面",
+          "pipeline_override": {
+            "心纸工坊-选择家具种类": {
+              "recognition": {
+                "param": {
+                  "expected": "地面"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "水面",
+          "pipeline_override": {
+            "心纸工坊-选择家具种类": {
+              "recognition": {
+                "param": {
+                  "expected": "水面"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "首位密探升级": {
+      "type": "switch",
+      "cases": [
+        {
+          "name": "yes",
+          "pipeline_override": {
+            "密探升级启动": {
+              "enabled": true
+            }
+          }
+        },
+        {
+          "name": "no",
+          "pipeline_override": {
+            "密探升级启动": {
+              "enabled": false
+            }
+          }
+        }
+      ]
+    },
+    "每日密探送礼": {
+      "type": "select",
+      "default_case": "送 1 次",
+      "cases": [
+        {
+          "name": "不送礼",
+          "pipeline_override": {
+            "赠送密探礼物启动": {
+              "enabled": false
+            }
+          }
+        },
+        {
+          "name": "送 1 次",
+          "pipeline_override": {
+            "赠送密探礼物启动": {
+              "enabled": true
+            },
+            "进行送礼2": {
+              "enabled": false
+            }
+          }
+        },
+        {
+          "name": "送 3 次",
+          "pipeline_override": {
+            "赠送密探礼物启动": {
+              "enabled": true
+            },
+            "进行送礼2": {
+              "enabled": true
+            },
+            "进行送礼3": {
+              "enabled": true
+            }
+          }
+        }
+      ]
+    },
+    "送礼跳过信赖值需要转换的密探": {
+      "type": "switch",
+      "cases": [
+        {
+          "name": "yes",
+          "pipeline_override": {}
+        },
+        {
+          "name": "no",
+          "pipeline_override": {
+            "信赖值check": {
+              "recognition": {
+                "param": {
+                  "template": ["trust_leveling.png"]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "收尾前做小道消息": {
+      "type": "switch",
+      "cases": [
+        {
+          "name": "yes",
+          "pipeline_override": {
+            "start_小道消息": {
+              "enabled": true
+            }
+          }
+        },
+        {
+          "name": "no",
+          "pipeline_override": {
+            "start_小道消息": {
+              "enabled": false
+            }
+          }
+        }
+      ]
+    },
+    "领取密探特训奖励": {
+      "type": "switch",
+      "cases": [
+        {
+          "name": "no",
+          "pipeline_override": {
+            "领取密探特训奖励启动": {
+              "enabled": false
+            }
+          }
+        },
+        {
+          "name": "yes",
+          "pipeline_override": {
+            "领取密探特训奖励启动": {
+              "enabled": true
+            }
+          }
+        }
+      ]
+    },
+    "购买天机符传x1": {
+      "type": "switch",
+      "description": "需要提前解锁二级密码",
+      "cases": [
+        {
+          "name": "no",
+          "pipeline_override": {
+            "买符传启动": {
+              "enabled": false
+            }
+          }
+        },
+        {
+          "name": "yes",
+          "pipeline_override": {
+            "买符传启动": {
+              "enabled": true
+            }
+          }
+        }
+      ]
+    },
+    "领取100体力": {
+      "type": "switch",
+      "description": "不领的话也会被发去邮箱，可以屯体力",
+      "cases": [
+        {
+          "name": "no",
+          "pipeline_override": {
+            "楼主查岗奖励-体力": {
+              "enabled": false
+            }
+          }
+        },
+        {
+          "name": "yes",
+          "pipeline_override": {
+            "楼主查岗奖励-体力": {
+              "enabled": true
+            }
+          }
+        }
+      ]
+    }
+  },
+  "advanced": {
+    "自定义打造材料数量": {
+      "field": "自定义打造材料数量",
+      "type": "string",
+      "default": "10",
+      "pipeline_override": {
+        "心纸工坊-材料合成数量": {
+          "expected": "{自定义打造材料数量}"
+        }
+      }
+    },
+    "自定义打造家具数量": {
+      "field": "自定义打造家具数量",
+      "type": "string",
+      "default": "1",
+      "pipeline_override": {
+        "心纸工坊-家具打造数量": {
+          "expected": "{自定义打造家具数量}"
+        }
+      }
     }
   }
 }

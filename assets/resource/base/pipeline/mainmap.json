@@ -715,7 +715,7 @@
       "type": "Click",
       "param": {}
     },
-    "post_delay": 5000
+    "post_delay": 8000
   },
   "已在界面-相见": {
     "recognition": {
