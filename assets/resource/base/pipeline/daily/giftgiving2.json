@@ -19,6 +19,7 @@
         "roi": [274, 101, 155, 37]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {
