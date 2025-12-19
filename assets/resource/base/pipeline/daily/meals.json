@@ -41,13 +41,14 @@
         "threshold": 0.8
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
     },
-    "post_delay": 1000,
-    "timeout": 4000,
-    "next": ["领午饭", "领晚饭", "stop"]
+    "post_delay": 2000,
+    "timeout": 5000,
+    "next": ["领午饭", "领晚饭"]
   },
   "领午饭": {
     "recognition": {
@@ -57,6 +58,7 @@
         "roi": [168, 583, 124, 121]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -74,6 +76,7 @@
         "roi": [177, 860, 109, 105]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
