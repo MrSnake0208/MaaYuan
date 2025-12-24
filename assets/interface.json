@@ -3570,6 +3570,13 @@
                   "template": "temp/tongqin-selectagent.png"
                 }
               }
+            },
+            "心纸营建-领取TM": {
+              "recognition": {
+                "param": {
+                  "template": "temp/aipin-collect.png"
+                }
+              }
             }
           },
           "option": ["爱拼才会赢指定密探", "进行家具打造"]
