@@ -1,13 +1,5 @@
 {
   "心纸营建启动": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "next": ["进入心纸营建历险", "[JumpBack]进入界面-心纸营建"]
   },
   "进入心纸营建历险": {
@@ -18,6 +10,7 @@
         "roi": [69, 1007, 165, 96]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {
@@ -41,6 +34,7 @@
         "roi": [612, 1108, 91, 104]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -55,6 +49,7 @@
         "roi": [612, 1108, 91, 104]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -75,7 +70,7 @@
         "target": [633, 22, 19, 11]
       }
     },
-    "pre_delay": 200
+    "pre_delay": 500
   },
   "心纸营建历险-开始": {
     "recognition": {
@@ -89,7 +84,7 @@
       "type": "Click",
       "param": {}
     },
-    "pre_delay": 200,
+    "pre_delay": 500,
     "next": ["心纸营建历险-佛脚获取"]
   },
   "心纸营建历险-开始ocr": {
@@ -106,7 +101,7 @@
         "target": [317, 1129, 82, 83]
       }
     },
-    "pre_delay": 200,
+    "pre_delay": 500,
     "next": ["心纸营建历险-佛脚获取"]
   },
   "心纸营建历险-材料搜寻": {
@@ -121,7 +116,7 @@
       "type": "Click",
       "param": {}
     },
-    "pre_delay": 200,
+    "pre_delay": 500,
     "next": [
       "心纸营建历险-派遣中",
       "[JumpBack]心纸营建历险-收取奖励",
@@ -136,6 +131,7 @@
         "roi": [572, 336, 96, 64]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "DoNothing",
       "param": {}
@@ -155,7 +151,7 @@
       "type": "Click",
       "param": {}
     },
-    "pre_delay": 200,
+    "pre_delay": 500,
     "next": ["心纸营建历险-跳过奖励"]
   },
   "心纸营建历险-跳过奖励": {
@@ -175,7 +171,7 @@
       "type": "Click",
       "param": {}
     },
-    "pre_delay": 200,
+    "pre_delay": 500,
     "next": ["心纸营建历险-确认获取奖励"]
   },
   "心纸营建历险-确认获取奖励": {
@@ -193,7 +189,7 @@
         "target": [633, 22, 19, 11]
       }
     },
-    "pre_delay": 200,
+    "pre_delay": 500,
     "focus": "已收取心纸营建自动历险奖励"
   },
   "心纸营建历险-佛脚获取": {
@@ -209,7 +205,7 @@
       "type": "Click",
       "param": {}
     },
-    "pre_delay": 200,
+    "pre_delay": 500,
     "next": [
       "心纸营建历险-佛脚派遣中",
       "[JumpBack]心纸营建历险-收取佛脚奖励",
@@ -243,7 +239,7 @@
       "type": "Click",
       "param": {}
     },
-    "pre_delay": 200,
+    "pre_delay": 500,
     "next": ["心纸营建历险-跳过奖励"]
   },
   "心纸营建历险-佛脚关卡": {
@@ -251,6 +247,7 @@
       "type": "DirectHit",
       "param": {}
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {
@@ -264,6 +261,7 @@
       "type": "DirectHit",
       "param": {}
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {
@@ -273,14 +271,6 @@
     "next": ["心纸营建历险-选人界面"]
   },
   "心纸营建历险-自动检测关卡": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "next": [
       "心纸营建历险-选择关卡5",
       "心纸营建历险-选择关卡4",
@@ -298,6 +288,7 @@
         "roi": [584, 321, 94, 58]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -313,6 +304,7 @@
         "roi": [584, 521, 94, 58]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -328,6 +320,7 @@
         "roi": [584, 721, 94, 58]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -343,6 +336,7 @@
         "roi": [584, 921, 94, 58]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -358,6 +352,7 @@
         "roi": [584, 1121, 94, 58]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -373,6 +368,7 @@
         "threshold": 0.6
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -391,6 +387,7 @@
         "roi": [88, 267, 549, 422]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -405,6 +402,7 @@
         "roi": [230, 904, 261, 79]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Swipe",
       "param": {
@@ -426,6 +424,7 @@
         "roi": [88, 267, 549, 422]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -437,6 +436,7 @@
       "type": "DirectHit",
       "param": {}
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {
@@ -454,10 +454,12 @@
         "roi": [230, 904, 261, 79]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
     },
+    "post_delay": 1000,
     "timeout": 2000,
     "next": ["心纸营建历险-检测行动力是否不足最低档", "心纸营建历险-派遣时长"]
   },
@@ -469,6 +471,7 @@
         "roi": [511, 908, 77, 55]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -485,6 +488,7 @@
         "roi": [331, 905, 49, 43]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "DoNothing",
       "param": {}
@@ -498,6 +502,7 @@
       "type": "DirectHit",
       "param": {}
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {
@@ -536,6 +541,7 @@
         "lower": [220, 85, 75]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "DoNothing",
       "param": {}
@@ -554,6 +560,7 @@
         "roi": [223, 994, 275, 75]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -574,6 +581,7 @@
         "roi": [561, 264, 158, 181]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -607,6 +615,7 @@
         "roi": [589, 820, 114, 59]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "DoNothing",
       "param": {}
@@ -621,6 +630,7 @@
         "roi": [589, 820, 114, 59]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -638,6 +648,7 @@
         "roi": [395, 116, 154, 73]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -653,6 +664,7 @@
         "roi": [283, 1174, 169, 74]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -669,6 +681,7 @@
         "roi": [5, 3, 713, 526]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {
@@ -685,6 +698,7 @@
         "roi": [126, 121, 169, 68]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
@@ -700,6 +714,7 @@
         "roi": [259, 1176, 212, 85]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
