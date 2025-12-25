@@ -243,6 +243,7 @@
     "next": ["stop"]
   },
   "抄作业-进入编队界面": {
+    "enabled": false,
     "max_hit": 1,
     "action": {
       "type": "Click",

@@ -1,5 +1,6 @@
 {
   "自动编队-启动": {
+    "enabled": false,
     "max_hit": 1,
     "action": {
       "type": "Click",

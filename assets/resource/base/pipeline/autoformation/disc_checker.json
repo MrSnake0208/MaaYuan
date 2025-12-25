@@ -1,5 +1,6 @@
 {
   "自动编队-命盘检测-启动": {
+    "enabled": false,
     "max_hit": 1,
     "recognition": {
       "type": "OCR",
