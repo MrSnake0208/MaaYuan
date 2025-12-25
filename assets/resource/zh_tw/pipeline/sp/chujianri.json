@@ -421,6 +421,7 @@
       "type": "OCR",
       "param": {
         "expected": "买",
+        "replace": ["買", "买"],
         "roi": [319, 796, 80, 46]
       }
     },
@@ -517,7 +518,8 @@
     "recognition": {
       "type": "OCR",
       "param": {
-        "expected": "出发",
+        "expected": "出",
+        "replace": ["發", "发"],
         "roi": [204, 1138, 305, 122]
       }
     },
@@ -538,7 +540,7 @@
     "recognition": {
       "type": "OCR",
       "param": {
-        "expected": "准",
+        "expected": "好",
         "roi": [203, 1152, 310, 95]
       }
     },

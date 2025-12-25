@@ -280,28 +280,15 @@
       "entry": "stop"
     },
     {
-      "name": "🌊傅融初见日",
+      "name": "💝 初见日",
       "entry": "初见日启动",
       "description": "使用前确保新手指引环节已完成（所有地点已解锁）。可选是否自动领取奖励。\n\n物品使用优先级为绿＞蓝＞紫＞金，不足会自动购买",
-      "option": ["初见日-是否自动领取奖励", "初见日-自动购买商品颜色"],
-      "pipeline_override": {
-        "进入初见日活动": {
-          "recognition": {
-            "type": "TemplateMatch",
-            "param": {
-              "template": "chujianri/furong_banner.png"
-            }
-          }
-        },
-        "初见日-启程": {
-          "recognition": {
-            "type": "TemplateMatch",
-            "param": {
-              "template": "chujianri/furong_qicheng.png"
-            }
-          }
-        }
-      }
+      "option": [
+        "初见日-日程",
+        "初见日-是否自动领取奖励",
+        "初见日-自动购买商品颜色"
+      ],
+      "pipeline_override": {}
     },
     {
       "name": "🔄 6-24/7-15 刷到体力耗尽",
@@ -8697,6 +8684,32 @@
                 "[JumpBack]朝歌-确认推进剧情",
                 "[JumpBack]朝歌-交易请求"
               ]
+            }
+          }
+        }
+      ]
+    },
+    "初见日-日程": {
+      "type": "select",
+      "cases": [
+        {
+          "name": "2025/12-傅融",
+          "pipeline_override": {
+            "进入初见日活动": {
+              "recognition": {
+                "type": "TemplateMatch",
+                "param": {
+                  "template": "chujianri/furong/2025/furong_banner.png"
+                }
+              }
+            },
+            "初见日-启程": {
+              "recognition": {
+                "type": "TemplateMatch",
+                "param": {
+                  "template": "chujianri/furong/2025/furong_qicheng.png"
+                }
+              }
             }
           }
         }
