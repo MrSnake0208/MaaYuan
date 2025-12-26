@@ -1,13 +1,5 @@
 {
   "每日分享启动": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "focus": "开始进行每日分享",
     "next": ["进入分享popup", "进入分享界面", "[JumpBack]进入界面-密探"]
   },
@@ -26,6 +18,7 @@
       }
     },
     "pre_delay": 500,
+    "post_delay": 1000,
     "next": ["进入分享popup"]
   },
   "进入分享popup": {
@@ -36,6 +29,7 @@
         "roi": [576, 137, 143, 166]
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {}
