@@ -106,12 +106,12 @@
     "action": {
       "type": "Swipe",
       "param": {
-        "begin": [667, 881, 0, 0],
-        "end": [57, 881, 0, 0]
+        "begin": [57, 881, 0, 0],
+        "end": [667, 881, 0, 0]
       }
     },
     "post_delay": 2000,
-    "next": ["初见日-点击物品"],
+    "next": ["初见日-第二策略"],
     "timeout": 5000
   },
   "初见日-点击物品": {
@@ -127,14 +127,15 @@
     "action": {
       "type": "Swipe",
       "param": {
-        "begin": [57, 881, 0, 0],
-        "end": [667, 881, 0, 0]
+        "begin": [667, 881, 0, 0],
+        "end": [57, 881, 0, 0]
       }
     },
     "post_delay": 2000,
     "timeout": 5000
   },
   "初见日-点击蓝色物品": {
+    "max_hit": 1,
     "recognition": {
       "type": "ColorMatch",
       "param": {
@@ -156,6 +157,7 @@
     "focus": "选择蓝色物品"
   },
   "初见日-点击紫色物品": {
+    "max_hit": 1,
     "recognition": {
       "type": "ColorMatch",
       "param": {
@@ -175,6 +177,7 @@
     "focus": "选择紫色物品"
   },
   "初见日-点击金色物品": {
+    "max_hit": 1,
     "recognition": {
       "type": "ColorMatch",
       "param": {
@@ -194,6 +197,7 @@
     "focus": "选择金色物品"
   },
   "初见日-点击绿色物品": {
+    "max_hit": 1,
     "recognition": {
       "type": "ColorMatch",
       "param": {

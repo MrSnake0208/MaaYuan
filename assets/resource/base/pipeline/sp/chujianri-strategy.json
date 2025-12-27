@@ -1,0 +1,251 @@
+{
+  "初见日-第二策略": {
+    "next": ["初见日-点击1号位物品"]
+  },
+  "初见日-点击1号位物品": {
+    "anchor": "初见日-选物品",
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [102, 879, 31, 15]
+      }
+    },
+    "post_delay": 2000,
+    "next": ["初见日-第二策略-添加-1", "初见日-在商铺"]
+  },
+  "初见日-第二策略-添加-1": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "添加",
+        "roi": [493, 947, 167, 68]
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "next": ["初见日-点击2号位物品"]
+  },
+  "初见日-点击2号位物品": {
+    "anchor": ["初见日-选物品"],
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [215, 871, 44, 27]
+      }
+    },
+    "post_delay": 2000,
+    "next": ["初见日-第二策略-添加-2", "初见日-在商铺"]
+  },
+  "初见日-第二策略-添加-2": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "添加",
+        "roi": [493, 947, 167, 68]
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "next": ["初见日-点击3号位物品"]
+  },
+  "初见日-点击3号位物品": {
+    "anchor": ["初见日-选物品"],
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [338, 868, 31, 34]
+      }
+    },
+    "post_delay": 2000,
+    "next": ["初见日-第二策略-添加-3", "初见日-在商铺"]
+  },
+  "初见日-第二策略-添加-3": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "添加",
+        "roi": [493, 947, 167, 68]
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "next": ["初见日-点击4号位物品"]
+  },
+  "初见日-点击4号位物品": {
+    "anchor": ["初见日-选物品"],
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [451, 868, 42, 37]
+      }
+    },
+    "post_delay": 2000,
+    "next": ["初见日-第二策略-添加-4", "初见日-在商铺"]
+  },
+  "初见日-第二策略-添加-4": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "添加",
+        "roi": [493, 947, 167, 68]
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "next": ["初见日-点击4号位物品"]
+  },
+  "初见日-在商铺": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["商"],
+        "roi": [0, 117, 263, 168]
+      }
+    },
+    "next": [
+      "[JumpBack]初见日-商铺购买策略",
+      "初见日-离开商店",
+      "[Anchor]初见日-选物品"
+    ]
+  },
+  "初见日-商铺购买策略": {
+    "max_hit": 1,
+    "next": ["初见日-商铺点击绿色物品", "[JumpBack]初见日-商铺下滑"]
+  },
+  "初见日-第二策略-购买商品": {
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "ChujianriShopping",
+        "custom_action_param": {
+          "target": "green"
+        }
+      }
+    }
+  },
+  "初见日-商铺-回顶": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["商"],
+        "roi": [0, 117, 263, 168]
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [644, 536, 1, 1],
+        "end": [644, 759, 1, 1],
+        "duration": 500
+      }
+    },
+    "post_delay": 2000
+  },
+  "初见日-商铺-下一页": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["商"],
+        "roi": [0, 117, 263, 168]
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [644, 759, 1, 1],
+        "end": [644, 536, 1, 1],
+        "duration": 500
+      }
+    },
+    "post_delay": 2000
+  },
+  "初见日-商铺-检测绿色物品": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["60"],
+        "roi": [63, 342, 584, 672]
+      }
+    }
+  },
+  "初见日-商铺-检测蓝色物品": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["120"],
+        "roi": [63, 342, 584, 672]
+      }
+    }
+  },
+  "初见日-商铺-检测紫色物品": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["210"],
+        "roi": [63, 342, 584, 672]
+      }
+    }
+  },
+  "初见日-第二策略-购买": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": "初见日-商铺-检测绿色物品"
+      }
+    },
+    "post_delay": 2000,
+    "next": ["初见日-代币是否不足最低档", "初见日-第二策略-点击购买"]
+  },
+  "初见日-第二策略-点击购买": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "买",
+        "roi": [319, 796, 80, 46]
+      }
+    },
+    "pre_delay": 500,
+    "action": {
+      "type": "Click"
+    },
+    "next": ["初见日-第二策略-获得物品"]
+  },
+  "初见日-第二策略-获得物品": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "roi": [21, 29, 684, 589],
+        "green_mask": true,
+        "threshold": 0.5
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [499, 15, 25, 12]
+      }
+    }
+  },
+  "初见日-离开商店": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["商"],
+        "roi": [0, 117, 263, 168]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [664, 190, 20, 14]
+      }
+    },
+    "post_delay": 2000,
+    "next": ["初见日-确定"]
+  }
+}

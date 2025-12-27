@@ -190,6 +190,7 @@ class AutoFormation(CustomAction):
     NAME_CONFUSION_MAP: Dict[str, List[str]] = {
         "士": ["土"],
         "郃": ["部", "邻"],
+        "诩": ["谢"],
     }
     TARGET_RECO_ROIS: List[Tuple[int, int, int, int]] = [
         (27, 1013, 136, 61),
