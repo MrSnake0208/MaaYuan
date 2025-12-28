@@ -1,0 +1,53 @@
+{
+  "剧情加速-启动": {
+    "next": ["剧情加速-点点剧情"]
+  },
+  "剧情加速-点点剧情": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": ["story.png", "story_ry.png"],
+        "green_mask": true,
+        "roi": [505, 986, 67, 67],
+        "threshold": 0.4
+      }
+    },
+    "action": {
+      "type": "DoNothing",
+      "param": {}
+    },
+    "next": ["剧情加速-剧情结束", "[JumpBack]剧情加速-闭眼点"]
+  },
+  "剧情加速-闭眼点": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [679, 1243, 21, 19]
+      }
+    }
+  },
+  "剧情加速-剧情结束": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": ["story.png", "story_ry.png"],
+        "green_mask": true,
+        "roi": [505, 986, 67, 67],
+        "threshold": 0.4
+      }
+    },
+    "inverse": true,
+    "next": ["剧情加速-dc"]
+  },
+  "剧情加速-dc": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [679, 1243, 21, 19]
+      }
+    },
+    "repeat": 10,
+    "next": ["剧情加速-点点剧情"],
+    "timeout": 4000
+  }
+}
