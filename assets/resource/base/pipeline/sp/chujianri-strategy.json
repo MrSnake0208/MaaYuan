@@ -96,7 +96,7 @@
     "action": {
       "type": "Click"
     },
-    "next": ["初见日-点击4号位物品"]
+    "next": ["初见日-确定"]
   },
   "初见日-在商铺": {
     "recognition": {

@@ -37,11 +37,30 @@
       "初见日-启程",
       "初见日-收拾",
       "初见日-已收拾",
-      "[JumpBack]初见日-点点对话"
+      "[JumpBack]初见日-点点对话",
+      "[JumpBack]初见日-点点奖励"
     ],
     "post_delay": 1000,
     "timeout": 4000,
     "focus": "已在初见日页面"
+  },
+  "初见日-点点奖励": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "roi": [151, 230, 444, 227],
+        "green_mask": true,
+        "threshold": 0.5
+      }
+    },
+    "pre_delay": 500,
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [499, 15, 25, 12]
+      }
+    }
   },
   "初见日-点点对话": {
     "recognition": {
@@ -68,7 +87,11 @@
       "type": "Click",
       "param": {}
     },
-    "next": ["初见日-已在出游准备界面", "初见日-启程"],
+    "next": [
+      "初见日-已在出游准备界面",
+      "初见日-启程",
+      "[JumpBack]初见日-点点奖励"
+    ],
     "post_delay": 1000,
     "timeout": 4000
   },
@@ -446,6 +469,7 @@
         "threshold": 0.5
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {
@@ -649,9 +673,11 @@
       "param": {
         "template": "common_reward.png",
         "roi": [151, 230, 444, 227],
+        "green_mask": true,
         "threshold": 0.5
       }
     },
+    "pre_delay": 500,
     "action": {
       "type": "Click",
       "param": {
