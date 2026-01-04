@@ -88,7 +88,7 @@ jobs:
         with:
           repository: syoius/MFAAvalonia
           fileName: "MFAAvalonia-*-win-${{ (matrix.arch == 'x86_64' && 'x64') || (matrix.arch == 'aarch64' && 'arm64') }}*"
-          tag: "v2.2.2-alpha.1"
+          tag: "v2.2.7"
           out-file-path: "MFAAvalonia"
           extract: true
 

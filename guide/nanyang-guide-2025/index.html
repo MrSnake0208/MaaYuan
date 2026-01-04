@@ -169,6 +169,30 @@
         cursor: pointer;
         user-select: none;
       }
+      .collection-search {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .collection-order-toggle {
+        border: 1px solid #d4deee;
+        background: white;
+        color: #4f6b9b;
+        font-size: 0.8rem;
+        padding: 6px 12px;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+      .collection-order-toggle:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .collection-order-toggle.active {
+        background: #eef3ff;
+        border-color: #9bbcf0;
+        color: #3f5f9a;
+      }
 
       .tags-container {
         display: flex;
@@ -316,12 +340,29 @@
         background: #eee;
         margin-left: 15px;
       }
+      .collection-group-action {
+        border: 1px solid #d4deee;
+        background: white;
+        color: #4f6b9b;
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        border-radius: 999px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .collection-group-action:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
 
       .collection-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
         gap: 12px;
         animation: slideDown 0.3s ease-out;
+      }
+      .collection-grid.ingame-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
       @keyframes slideDown {
         from {
@@ -1389,6 +1430,9 @@
         .collection-grid {
           grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
           gap: 10px;
+        }
+        .collection-grid.ingame-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
         .mobile-only {
           display: inline;
@@ -2623,12 +2667,28 @@
 
       <div v-if="currentTab === 'col'">
         <div class="section-header" style="margin-top: 0">
-          <input
-            type="text"
-            v-model="searchQuery"
-            placeholder="搜索名称..."
-            style="width: 200px"
-          />
+          <div class="collection-search">
+            <input
+              type="text"
+              v-model="searchQuery"
+              placeholder="搜索名称..."
+              style="width: 200px"
+            />
+            <button
+              type="button"
+              class="collection-order-toggle"
+              :class="{active: useIngameOrder}"
+              @click="useIngameOrder = !useIngameOrder"
+            >
+              {{ useIngameOrder ? '切回原本排序' : '按游戏内排序' }}
+            </button>
+            <span
+              v-if="useIngameOrder"
+              style="color: #e57373; font-size: 0.75rem"
+            >
+              需要确保游戏内图鉴时打开右上角没有新培育的提示，且第一个菌子是适中蓝莓味竹荪
+            </span>
+          </div>
           <label class="filter-switch">
             <input type="checkbox" v-model="showOnlyUncollected" />
             只显示未拥有
@@ -2676,9 +2736,21 @@
                     ({{ group.collectedCount }}/{{ group.totalCount }})
                   </span>
                 </div>
+                <button
+                  v-if="!useIngameOrder"
+                  type="button"
+                  class="collection-group-action"
+                  @click.stop="selectGroupAll(group)"
+                >
+                  一键勾选
+                </button>
               </div>
 
-              <div class="collection-grid" v-show="isSectionExpanded(group)">
+              <div
+                class="collection-grid"
+                :class="{ 'ingame-grid': useIngameOrder }"
+                v-show="isSectionExpanded(group)"
+              >
                 <div
                   class="mushroom-card"
                   v-for="m in group.items"
@@ -5962,6 +6034,302 @@
         "绣衣书案",
         "黄金建木",
       ];
+      const INGAME_ORDER = [
+        "适中蓝莓味竹荪",
+        "巨型荷塘夜色地星菌",
+        "小斑比草帽菌",
+        "中等善良刺头菌",
+        "小巧黄金喇叭菌",
+        "超小型木桩鸟巢菌",
+        "清淡猪肉味竹荪",
+        "一般暗黑猫爪菌",
+        "适中墨鱼丸味竹荪",
+        "超小看破一切泡泡菌",
+        "袖珍善良刺头菌",
+        "超级宅宅猴头菌",
+        "巨巨寒冰刺头菌",
+        "小巧超火爆喇叭菌",
+        "常见菜色泡泡菌",
+        "平凡笨蛋猴头菌",
+        "平凡宅宅猴头菌",
+        "浓厚猪肉味竹荪",
+        "清淡番茄味竹荪",
+        "中庸深渊鹿角菌",
+        "大型西凉菜菜菌",
+        "路边朴素地星菌",
+        "超大菜色泡泡菌",
+        "迷你红温猫爪菌",
+        "微小笨蛋猴头菌",
+        "普通恶毒草帽菌",
+        "小巧封心锁爱喇叭菌",
+        "通常幽州菜菜菌",
+        "一般傲娇猫爪菌",
+        "超大过劳泡泡菌",
+        "超大看破一切泡泡菌",
+        "普通斑比草帽菌",
+        "特大陷阵营喇叭菌",
+        "大型水平太菜菜菌",
+        "超小新手泡泡菌",
+        "寻常封心锁爱喇叭菌",
+        "膨胀贾诩珊瑚菌",
+        "庞大酥酪宝石菌",
+        "迷你萌萌猫爪菌",
+        "中庸素描鹿角菌",
+        "标准不可燃鸟巢菌",
+        "大型幽州菜菜菌",
+        "巨型黄花菜地星菌",
+        "缩水公孙珊珊瑚菌",
+        "平凡隐鸢阁冠名猴头菌",
+        "大号一口见阿祖幽灵菌",
+        "超级笨蛋猴头菌",
+        "迷你傲娇猫爪菌",
+        "适中莲藕味竹荪",
+        "小只轻骑兵地星菌",
+        "大斑比草帽菌",
+        "路边粉毛地星菌",
+        "标准可燃鸟巢菌",
+        "庞大番茄炒蛋宝石菌",
+        "中庸蔫蔫鹿角菌",
+        "袖珍太白金星刺头菌",
+        "小号一口见阿祖幽灵菌",
+        "微型素描鹿角菌",
+        "常见过劳泡泡菌",
+        "超大亚健康泡泡菌",
+        "普通健美草帽菌",
+        "小小坏种宝石菌",
+        "微小隐鸢阁冠名猴头菌",
+        "寻常超火爆喇叭菌",
+        "缩水张郃珊瑚菌",
+        "中级戏学珊瑚菌",
+        "巨体碧玉鹿角菌",
+        "纤小滞销美灵芝",
+        "巨巨善良刺头菌",
+        "超大型厨余鸟巢菌",
+        "大健美草帽菌",
+        "标准陶瓷鸟巢菌",
+        "巨巨邪恶刺头菌",
+        "巨大萌萌猫爪菌",
+        "小只黄花菜地星菌",
+        "小号幻象幽灵菌",
+        "大号挑染幽灵菌",
+        "清淡蓝莓味竹荪",
+        "路边黄花菜地星菌",
+        "中号蓝天白云幽灵菌",
+        "通常水平太菜菜菌",
+        "常规躺板板宝石菌",
+        "大恶毒草帽菌",
+        "硕大苍白美灵芝",
+        "微小宅宅猴头菌",
+        "中等太白金星刺头菌",
+        "小型幽州菜菜菌",
+        "大老土草帽菌",
+        "大号冰山幽灵菌",
+        "微型碧玉鹿角菌",
+        "适中番茄味竹荪",
+        "膨胀戏学珊瑚菌",
+        "中号冰山幽灵菌",
+        "小号蓝天白云幽灵菌",
+        "中庸二刺螈鹿角菌",
+        "寻常黄金喇叭菌",
+        "通常椰椰菜菜菌",
+        "巨大傲娇猫爪菌",
+        "标准木桩鸟巢菌",
+        "小小酥酪宝石菌",
+        "寻常阴湿美灵芝",
+        "巨体素描鹿角菌",
+        "浓厚蓝莓味竹荪",
+        "小号暗黑幽灵菌",
+        "适中猪肉味竹荪",
+        "纤小阴湿美灵芝",
+        "庞大躺板板宝石菌",
+        "超小型可燃鸟巢菌",
+        "超级逃课猴头菌",
+        "路边荷塘夜色地星菌",
+        "巨巨魔法少女刺头菌",
+        "小小番茄炒蛋宝石菌",
+        "小型西凉菜菜菌",
+        "硕大潮人美灵芝",
+        "微型应援棒鹿角菌",
+        "巨体深渊鹿角菌",
+        "小健美草帽菌",
+        "中等魔法少女刺头菌",
+        "一般萌萌猫爪菌",
+        "超大新手泡泡菌",
+        "巨型轻骑兵地星菌",
+        "标准五彩豆鸟巢菌",
+        "超大型可燃鸟巢菌",
+        "特大青春痘喇叭菌",
+        "超小亚健康泡泡菌",
+        "常见新手泡泡菌",
+        "常见实习泡泡菌",
+        "小只荷塘夜色地星菌",
+        "小老土草帽菌",
+        "特大黄金喇叭菌",
+        "路边轻骑兵地星菌",
+        "袖珍魔法少女刺头菌",
+        "中号一口见阿祖幽灵菌",
+        "普通老土草帽菌",
+        "小洁癖草帽菌",
+        "常规酥酪宝石菌",
+        "大蓝瘦草帽菌",
+        "中级陈登珊瑚菌",
+        "微小社牛猴头菌",
+        "常见亚健康泡泡菌",
+        "巨大凑凑猫爪菌",
+        "通常老菜菜菌",
+        "小号挑染幽灵菌",
+        "常规番茄炒蛋宝石菌",
+        "小小躺板板宝石菌",
+        "寻常滞销美灵芝",
+        "大型椰椰菜菜菌",
+        "巨巨太白金星刺头菌",
+        "小巧陷阵营喇叭菌",
+        "微小逃课猴头菌",
+        "大洁癖草帽菌",
+        "小巧夕阳喇叭菌",
+        "庞大夜光宝石菌",
+        "缩水董奉珊瑚菌",
+        "超小型不可燃鸟巢菌",
+        "超大型木桩鸟巢菌",
+        "大型裂开菜菜菌",
+        "小恶毒草帽菌",
+        "中号挑染幽灵菌",
+        "超小型陶瓷鸟巢菌",
+        "寻常夕阳喇叭菌",
+        "巨型朴素地星菌",
+        "超小型厨余鸟巢菌",
+        "中级张郃珊瑚菌",
+        "平凡社牛猴头菌",
+        "巨体二刺螈鹿角菌",
+        "超大型五彩豆鸟巢菌",
+        "袖珍小荧光刺头菌",
+        "迷你撞色猫爪菌",
+        "通常西凉菜菜菌",
+        "迷你暗黑猫爪菌",
+        "巨体蔫蔫鹿角菌",
+        "巨型森系地星菌",
+        "硕大阴湿美灵芝",
+        "纤小苍白美灵芝",
+        "浓厚墨鱼丸味竹荪",
+        "中级公孙珊珊瑚菌",
+        "寻常红颜美灵芝",
+        "小小夜光宝石菌",
+        "中级贾诩珊瑚菌",
+        "庞大白切黑宝石菌",
+        "浓厚黄花菜味竹荪",
+        "超小实习泡泡菌",
+        "常见看破一切泡泡菌",
+        "大号蓝天白云幽灵菌",
+        "小型水平太菜菜菌",
+        "小只粉毛地星菌",
+        "大型老菜菜菌",
+        "大号幻象幽灵菌",
+        "超小过劳泡泡菌",
+        "巨大红温猫爪菌",
+        "超级高智商猴头菌",
+        "超小型五彩豆鸟巢菌",
+        "特大夕阳喇叭菌",
+        "寻常苍白美灵芝",
+        "纤小潮人美灵芝",
+        "寻常陷阵营喇叭菌",
+        "一般凑凑猫爪菌",
+        "常规坏种宝石菌",
+        "普通洁癖草帽菌",
+        "通常裂开菜菜菌",
+        "小只朴素地星菌",
+        "浓厚番茄味竹荪",
+        "缩水贾诩珊瑚菌",
+        "特大封心锁爱喇叭菌",
+        "平凡逃课猴头菌",
+        "小型椰椰菜菜菌",
+        "寻常潮人美灵芝",
+        "中等荧光刺头菌",
+        "微型二刺螈鹿角菌",
+        "标准厨余鸟巢菌",
+        "巨型粉毛地星菌",
+        "超大型陶瓷鸟巢菌",
+        "小型老菜菜菌",
+        "清淡莲藕味竹荪",
+        "巨大撞色猫爪菌",
+        "硕大红颜美灵芝",
+        "庞大坏种宝石菌",
+        "清淡黄花菜味竹荪",
+        "超大型不可燃鸟巢菌",
+        "小只森系地星菌",
+        "小小白切黑宝石菌",
+        "小型裂开菜菜菌",
+        "超级社牛猴头菌",
+        "硕大瘦身美灵芝",
+        "浓厚莲藕味竹荪",
+        "中号幻象幽灵菌",
+        "膨胀董奉珊瑚菌",
+        "常规夜光宝石菌",
+        "缩水陈登珊瑚菌",
+        "中庸碧玉鹿角菌",
+        "巨体应援棒鹿角菌",
+        "适中黄花菜味竹荪",
+        "微型蔫蔫鹿角菌",
+        "特大超火爆喇叭菌",
+        "缩水戏学珊瑚菌",
+        "巨大暗黑猫爪菌",
+        "超小菜色泡泡菌",
+        "纤小瘦身美灵芝",
+        "巨巨荧光刺头菌",
+        "小蓝瘦草帽菌",
+        "常规白切黑宝石菌",
+        "纤小红颜美灵芝",
+        "中号暗黑幽灵菌",
+        "超大实习泡泡菌",
+        "中等邪恶刺头菌",
+        "平凡高智商猴头菌",
+        "小号冰山幽灵菌",
+        "寻常青春痘喇叭菌",
+        "大号暗黑幽灵菌",
+        "普通蓝瘦草帽菌",
+        "寻常瘦身美灵芝",
+        "微小高智商猴头菌",
+        "小巧青春痘喇叭菌",
+        "膨胀陈登珊瑚菌",
+        "膨胀张郃珊瑚菌",
+        "微型深渊鹿角菌",
+        "中级董奉珊瑚菌",
+        "硕大滞销美灵芝",
+        "一般红温猫爪菌",
+        "膨胀公孙珊珊瑚菌",
+        "一般撞色猫爪菌",
+        "超级隐鸢阁冠名猴头菌",
+        "迷你凑凑猫爪菌",
+        "袖珍寒冰刺头菌",
+        "中庸应援棒鹿角菌",
+        "袖珍邪恶刺头菌",
+        "清淡墨鱼丸味竹荪",
+        "中等寒冰刺头菌",
+        "路边森系地星菌",
+        "未能长大的草帽菌",
+        "未能长大的泡泡菌",
+        "未能长大的刺头菌",
+        "未能长大的猫爪菌",
+        "未能长大的珊瑚菌",
+        "未能长大的喇叭菌",
+        "未能长大的地星菌",
+        "未能长大的幽灵菌",
+        "未能长大的菜菜菌",
+        "未能长大的鹿角菌",
+        "未能长大的猴头菌",
+        "未能长大的鸟巢菌",
+        "未能长大的美灵芝",
+        "未能长大的竹荪",
+        "未能长大的宝石菌",
+      ];
+      const INGAME_ORDER_INDEX = new Map(
+        INGAME_ORDER.map((name, index) => [name.trim(), index])
+      );
+      const getIngameOrderIndex = (name) => {
+        const key = String(name || "").trim();
+        if (!key) return Number.MAX_SAFE_INTEGER;
+        const index = INGAME_ORDER_INDEX.get(key);
+        return index === undefined ? Number.MAX_SAFE_INTEGER : index;
+      };
       const LONG_TIME_MUSHROOMS = new Set([
         "袖珍善良刺头菌",
         "袖珍魔法少女刺头菌",
@@ -6162,6 +6530,7 @@
               localStorage.getItem("mushroom_current_time") || "白天"
             );
             const searchQuery = ref("");
+            const useIngameOrder = ref(false);
             const showOnlyUncollected = ref(false);
             const orderQuery = ref("");
             const storedOrderHints = localStorage.getItem(
@@ -7705,6 +8074,7 @@
             const isSectionExpanded = (group) => {
               if (searchQuery.value && searchQuery.value.trim() !== "")
                 return true;
+              if (useIngameOrder.value) return true;
               if (manualToggleState[group.branchName] !== undefined) {
                 return manualToggleState[group.branchName];
               }
@@ -7716,6 +8086,23 @@
             const toggleSection = (group) => {
               const current = isSectionExpanded(group);
               manualToggleState[group.branchName] = !current;
+            };
+
+            const selectGroupAll = (group) => {
+              if (!group || !Array.isArray(group.items)) return;
+              const list = currentUser.value.collected;
+              const pending = ensurePendingList();
+              group.items.forEach((item) => {
+                const resolvedId = normalizeMushroomId(item.id);
+                if (!resolvedId) return;
+                const pendingIdx = pending.indexOf(resolvedId);
+                if (pendingIdx > -1) {
+                  pending.splice(pendingIdx, 1);
+                }
+                if (!list.includes(resolvedId)) {
+                  list.push(resolvedId);
+                }
+              });
             };
 
             const scrollToSection = (branchName) => {
@@ -7736,6 +8123,46 @@
                 return matchName && matchCollected;
               });
 
+              const collectedSet = new Set(currentUser.value.collected);
+              const getProgressClass = (collectedCount, totalCount) => {
+                if (totalCount === 0 || collectedCount === 0)
+                  return "progress-empty";
+                if (collectedCount === totalCount) return "progress-complete";
+                return "progress-partial";
+              };
+
+              if (useIngameOrder.value) {
+                const ordered = filtered
+                  .map((item, index) => ({
+                    item,
+                    index,
+                    order: getIngameOrderIndex(item.name),
+                  }))
+                  .sort((a, b) => {
+                    const orderDiff = a.order - b.order;
+                    if (orderDiff !== 0) return orderDiff;
+                    return a.index - b.index;
+                  })
+                  .map(({ item }) => item);
+                const collectedCount = ordered.filter((i) =>
+                  collectedSet.has(i.id)
+                ).length;
+                const totalCount = ordered.length;
+                const isComplete =
+                  totalCount > 0 && collectedCount === totalCount;
+                return [
+                  {
+                    branchName: "游戏内排序",
+                    items: ordered,
+                    isOwned: true,
+                    collectedCount,
+                    totalCount,
+                    isComplete,
+                    progressClass: getProgressClass(collectedCount, totalCount),
+                  },
+                ];
+              }
+
               const groups = {};
               allBranches.forEach((b) => (groups[b] = []));
               groups["/"] = [];
@@ -7746,14 +8173,6 @@
               });
 
               const result = [];
-              const collectedSet = new Set(currentUser.value.collected);
-              const getProgressClass = (collectedCount, totalCount) => {
-                if (totalCount === 0 || collectedCount === 0)
-                  return "progress-empty";
-                if (collectedCount === totalCount) return "progress-complete";
-                return "progress-partial";
-              };
-
               allBranches.forEach((b) => {
                 if (groups[b].length > 0) {
                   const isOwned =
@@ -8044,6 +8463,7 @@
               currentTab,
               currentTime,
               searchQuery,
+              useIngameOrder,
               showOnlyUncollected,
               orderQuery,
               showOrderHints,
@@ -8135,6 +8555,7 @@
               getOrderTargetImgSrc,
               isSectionExpanded,
               toggleSection,
+              selectGroupAll,
               scrollToSection,
             };
           },
