@@ -46,7 +46,8 @@
     "recognition": {
       "type": "OCR",
       "param": {
-        "expected": ["菌"]
+        "expected": ["菌"],
+        "roi": [76, 1149, 131, 58]
       }
     },
     "next": ["[JumpBack]南阳-领取每日奖励", "南阳-冷启动", "南阳-自动护理"],
