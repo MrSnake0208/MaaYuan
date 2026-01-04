@@ -885,6 +885,74 @@
         border-radius: 10px;
         padding: 8px;
       }
+      .order-picker {
+        max-height: 60vh;
+        overflow-y: auto;
+      }
+      .order-picker-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+      .order-picker-tabs {
+        display: flex;
+        gap: 6px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+      }
+      .order-picker-tabs::-webkit-scrollbar {
+        display: none;
+      }
+      .order-picker-tab {
+        background: white;
+        border: 1px solid #d6ddea;
+        border-radius: 999px;
+        padding: 2px 10px;
+        font-size: 0.72rem;
+        cursor: pointer;
+        color: #5b6f91;
+        white-space: nowrap;
+      }
+      .order-picker-tab:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .order-picker-tab.active {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: rgba(62, 121, 191, 0.08);
+      }
+      .order-picker-close {
+        background: white;
+        border: 1px solid #d6ddea;
+        border-radius: 999px;
+        padding: 2px 10px;
+        font-size: 0.7rem;
+        cursor: pointer;
+        color: #5b6f91;
+      }
+      .order-picker-close:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .order-picker-group + .order-picker-group {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #d0dae8;
+      }
+      .order-picker-title {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #536a88;
+      }
+      .order-picker .order-results {
+        margin-top: 6px;
+        grid-template-columns: repeat(9, minmax(0, 1fr));
+      }
       .order-subtitle {
         font-size: 0.75rem;
         color: #6f82a3;
@@ -1432,6 +1500,22 @@
           gap: 10px;
         }
         .collection-grid.ingame-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        .order-picker-tabs {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 6px;
+          overflow-x: visible;
+        }
+        .order-picker-tab {
+          width: 100%;
+          text-align: center;
+        }
+        .order-results {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        .order-picker .order-results {
           grid-template-columns: repeat(3, minmax(0, 1fr));
         }
         .mobile-only {
@@ -2043,7 +2127,57 @@
                 type="text"
                 v-model="orderQuery"
                 placeholder="搜索并添加订单所需的菌子..."
+                @focus="orderPickerVisible = true"
+                @click="orderPickerVisible = true"
               />
+            </div>
+            <div
+              v-if="orderPickerVisible && !orderQuery"
+              class="order-results-wrap order-picker"
+            >
+              <div class="order-picker-header">
+                <div class="order-subtitle">按类别添加</div>
+                <button
+                  class="order-picker-close"
+                  @click="orderPickerVisible = false"
+                >
+                  收起
+                </button>
+              </div>
+              <div v-if="orderCategoryGroups.length" class="order-picker-tabs">
+                <button
+                  v-for="group in orderCategoryGroups"
+                  :key="group.category"
+                  class="order-picker-tab"
+                  :class="{ active: orderPickerCategory === group.category }"
+                  @click="setOrderPickerCategory(group.category)"
+                >
+                  {{ group.category }}
+                </button>
+              </div>
+              <div v-if="orderCategoryGroups.length === 0" class="order-empty">
+                暂无可选菌子
+              </div>
+              <div v-else class="order-picker-group">
+                <div class="order-results">
+                  <div
+                    v-for="m in orderActiveCategory.items"
+                    :key="m.id"
+                    class="order-result"
+                    @click="addOrderItem(m.id)"
+                  >
+                    <div class="target-img-box order-result-img">
+                      <img
+                        :src="getOrderTargetImgSrc(m.name)"
+                        class="target-img"
+                        @error="handleImgError"
+                        :alt="m.name"
+                      />
+                    </div>
+                    <div class="order-result-name">{{ m.name }}</div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div v-if="orderQuery" class="order-results-wrap">
               <div class="order-subtitle">搜索结果</div>
@@ -6534,6 +6668,8 @@
             const useIngameOrder = ref(false);
             const showOnlyUncollected = ref(false);
             const orderQuery = ref("");
+            const orderPickerVisible = ref(false);
+            const orderPickerCategory = ref("");
             const storedOrderHints = localStorage.getItem(
               "mushroom_order_hints"
             );
@@ -6584,14 +6720,7 @@
             const reversedOrderHistory = computed(() => {
               return [...(currentUser.value.orderHistory || [])].reverse();
             });
-            const orderPresets = [
-              "刘辩",
-              "傅融",
-              "左慈",
-              "袁基",
-              "孙策",
-              "密探",
-            ];
+            const orderPresets = ["刘辩", "傅融", "左慈", "袁基", "孙策"];
             const orderDraft = reactive({ id: "", name: "", items: [] });
             const orderFormVisible = ref(false);
             const storedOrderListCollapsed = localStorage.getItem(
@@ -6974,6 +7103,233 @@
                 )
                 .slice(0, 12);
             });
+            const normalizeOrderCategory = (value) => {
+              const raw = (value || "").trim();
+              return raw && raw !== "/" ? raw : "未分类";
+            };
+            const stripOrderCategorySuffix = (name, category) => {
+              const trimmed = (name || "").trim();
+              const cat = (category || "").trim();
+              if (cat && trimmed.endsWith(cat)) {
+                return trimmed.slice(0, trimmed.length - cat.length);
+              }
+              return trimmed;
+            };
+            const orderPrefixRankMap = new Map([
+              ["超小", 0],
+              ["小小", 0],
+              ["纤小", 0],
+              ["小", 0],
+              ["微小", 0],
+              ["迷你", 0],
+              ["袖珍", 0],
+              ["小巧", 0],
+              ["缩水", 0],
+              ["小只", 0],
+              ["微型", 0],
+              ["清淡", 0],
+              ["常见", 1],
+              ["常规", 1],
+              ["普通", 1],
+              ["寻常", 1],
+              ["适中", 1],
+              ["中等", 1],
+              ["中", 1],
+              ["中级", 1],
+              ["一般", 1],
+              ["平凡", 1],
+              ["路边", 1],
+              ["中庸", 1],
+              ["超大", 2],
+              ["庞大", 2],
+              ["硕大", 2],
+              ["巨大", 2],
+              ["巨巨", 2],
+              ["特大", 2],
+              ["大", 2],
+              ["巨型", 2],
+              ["巨体", 2],
+              ["超级", 2],
+              ["浓厚", 2],
+              ["膨胀", 2],
+            ]);
+            const orderPrefixSmallKeywords = [
+              "超小",
+              "小小",
+              "纤小",
+              "迷你",
+              "袖珍",
+              "小巧",
+              "缩水",
+              "小只",
+              "微小",
+              "微型",
+              "小",
+              "清淡",
+            ];
+            const orderPrefixLargeKeywords = [
+              "超大",
+              "庞大",
+              "硕大",
+              "巨大",
+              "巨巨",
+              "特大",
+              "巨型",
+              "巨体",
+              "超级",
+              "浓厚",
+              "膨胀",
+              "大",
+              "巨",
+            ];
+            const getOrderPrefixRank = (prefix) => {
+              const trimmed = (prefix || "").trim();
+              if (!trimmed) return 1;
+              if (orderPrefixRankMap.has(trimmed)) {
+                return orderPrefixRankMap.get(trimmed);
+              }
+              if (
+                orderPrefixSmallKeywords.some((keyword) =>
+                  trimmed.includes(keyword)
+                )
+              ) {
+                return 0;
+              }
+              if (
+                orderPrefixLargeKeywords.some((keyword) =>
+                  trimmed.includes(keyword)
+                )
+              ) {
+                return 2;
+              }
+              return 1;
+            };
+            const orderPrefixTokens = Array.from(
+              new Set([
+                ...orderPrefixRankMap.keys(),
+                "超小型",
+                "超大型",
+                "小型",
+                "大型",
+                "标准",
+                "通常",
+              ])
+            ).sort((a, b) => b.length - a.length);
+            const getOrderFeatureFromPrefix = (core) => {
+              const trimmed = (core || "").trim();
+              if (!trimmed) return "";
+              for (const token of orderPrefixTokens) {
+                if (trimmed.startsWith(token) && trimmed.length > token.length) {
+                  return trimmed.slice(token.length);
+                }
+              }
+              return "";
+            };
+            const orderCategoryGroups = computed(() => {
+              const selected = new Set(
+                orderDraft.items.map((item) => normalizeMushroomId(item.id))
+              );
+              const categoryOrder = [];
+              const allCategoryItems = new Map();
+              const coreById = new Map();
+              const indexById = new Map();
+              database
+                .filter((m) => !m.isFailed)
+                .forEach((m) => {
+                  const category = normalizeOrderCategory(m.category);
+                  if (!allCategoryItems.has(category)) {
+                    allCategoryItems.set(category, []);
+                    categoryOrder.push(category);
+                  }
+                  const list = allCategoryItems.get(category);
+                  list.push(m);
+                  indexById.set(m.id, list.length - 1);
+                  coreById.set(m.id, stripOrderCategorySuffix(m.name, category));
+                });
+              const suffixFeatureById = new Map();
+              allCategoryItems.forEach((items) => {
+                const cores = items.map((m) => coreById.get(m.id) || "");
+                const suffixCount = new Map();
+                cores.forEach((core) => {
+                  const base = core || "";
+                  for (let len = 2; len <= base.length; len += 1) {
+                    const suffix = base.slice(base.length - len);
+                    suffixCount.set(suffix, (suffixCount.get(suffix) || 0) + 1);
+                  }
+                });
+                items.forEach((m, idx) => {
+                  const core = cores[idx] || "";
+                  let best = core;
+                  let bestLen = 0;
+                  for (let len = 2; len <= core.length; len += 1) {
+                    const suffix = core.slice(core.length - len);
+                    if ((suffixCount.get(suffix) || 0) >= 2 && len > bestLen) {
+                      best = suffix;
+                      bestLen = len;
+                    }
+                  }
+                  suffixFeatureById.set(m.id, best);
+                });
+              });
+              const featureKeyById = new Map();
+              allCategoryItems.forEach((items) => {
+                items.forEach((m) => {
+                  const core = coreById.get(m.id) || "";
+                  const explicit = getOrderFeatureFromPrefix(core);
+                  const key = explicit || suffixFeatureById.get(m.id) || core;
+                  featureKeyById.set(m.id, key);
+                });
+              });
+              const prefixRankById = new Map();
+              allCategoryItems.forEach((items, category) => {
+                items.forEach((m) => {
+                  const core = coreById.get(m.id) || "";
+                  const feature = featureKeyById.get(m.id) || "";
+                  const prefix =
+                    feature && core.endsWith(feature)
+                      ? core.slice(0, core.length - feature.length)
+                      : core;
+                  prefixRankById.set(m.id, getOrderPrefixRank(prefix));
+                });
+              });
+              const groups = [];
+              categoryOrder.forEach((category) => {
+                const items = allCategoryItems.get(category) || [];
+                const filtered = items.filter((m) => !selected.has(m.id));
+                if (!filtered.length) return;
+                const featureGroups = new Map();
+                filtered.forEach((m) => {
+                  const key = featureKeyById.get(m.id) || "";
+                  if (!featureGroups.has(key)) featureGroups.set(key, []);
+                  featureGroups.get(key).push(m);
+                });
+                const ordered = [];
+                featureGroups.forEach((groupItems) => {
+                  const sorted = [...groupItems].sort((a, b) => {
+                    const rankA = prefixRankById.get(a.id) ?? 1;
+                    const rankB = prefixRankById.get(b.id) ?? 1;
+                    if (rankA !== rankB) return rankA - rankB;
+                    const idxA = indexById.get(a.id) ?? 0;
+                    const idxB = indexById.get(b.id) ?? 0;
+                    return idxA - idxB;
+                  });
+                  ordered.push(...sorted);
+                });
+                groups.push({ category, items: ordered });
+              });
+              return groups;
+            });
+            const orderActiveCategory = computed(() => {
+              const groups = orderCategoryGroups.value;
+              if (groups.length === 0) return { category: "", items: [] };
+              const active = groups.find(
+                (group) => group.category === orderPickerCategory.value
+              );
+              return active || groups[0];
+            });
+            const setOrderPickerCategory = (category) => {
+              orderPickerCategory.value = category;
+            };
 
             const setOrderPreset = (preset) => {
               orderDraft.name = preset;
@@ -7011,6 +7367,8 @@
               orderDraft.name = "";
               orderDraft.items = [];
               orderQuery.value = "";
+              orderPickerVisible.value = false;
+              orderPickerCategory.value = "";
             };
 
             const startNewOrder = () => {
@@ -7774,6 +8132,22 @@
                 newVal ? "true" : "false"
               );
             });
+            watch(
+              orderCategoryGroups,
+              (groups) => {
+                if (!groups.length) {
+                  orderPickerCategory.value = "";
+                  return;
+                }
+                const hasActive = groups.some(
+                  (group) => group.category === orderPickerCategory.value
+                );
+                if (!hasActive) {
+                  orderPickerCategory.value = groups[0].category;
+                }
+              },
+              { immediate: true }
+            );
 
             const addUser = () => {
               const name = prompt("请输入新用户名:");
@@ -8467,6 +8841,8 @@
               useIngameOrder,
               showOnlyUncollected,
               orderQuery,
+              orderPickerVisible,
+              orderPickerCategory,
               showOrderHints,
               orderAffectsRanking,
               orderPresets,
@@ -8479,6 +8855,9 @@
               orders,
               orderTargets,
               orderCandidates,
+              orderCategoryGroups,
+              orderActiveCategory,
+              setOrderPickerCategory,
               startNewOrder,
               setOrderPreset,
               addOrderItem,
@@ -8567,3 +8946,5 @@
     </script>
   </body>
 </html>
+
+
