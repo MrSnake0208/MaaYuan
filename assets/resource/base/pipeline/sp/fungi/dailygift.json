@@ -18,13 +18,14 @@
       }
     },
     "post_delay": 2000,
+    "focus": "检测到商店有红点，尝试领取每日礼包",
     "next": ["南阳-白金币tab"]
   },
   "南阳-白金币tab": {
     "recognition": {
       "type": "OCR",
       "param": {
-        "expected": ["商店"],
+        "expected": ["商", "店"],
         "roi": [0, 236, 212, 175]
       }
     },
@@ -36,8 +37,11 @@
       }
     },
     "post_delay": 1500,
-    "next": ["南阳-点击免费礼包"]
+    "next": ["南阳-点击免费礼包"],
+    "on_error": ["南阳-无礼包"],
+    "timeout": 4000
   },
+  "南阳-无礼包": {},
   "南阳-点击免费礼包": {
     "recognition": {
       "type": "OCR",
@@ -56,7 +60,7 @@
     "recognition": {
       "type": "OCR",
       "param": {
-        "expected": ["购买", "購買"],
+        "expected": ["购", "买", "購", "買"],
         "roi": [319, 850, 95, 49]
       }
     },
@@ -90,7 +94,7 @@
     "recognition": {
       "type": "OCR",
       "param": {
-        "expected": ["商店"],
+        "expected": ["商", "店"],
         "roi": [0, 236, 212, 175]
       }
     },
