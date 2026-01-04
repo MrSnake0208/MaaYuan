@@ -9002,6 +9002,9 @@
             },
             "南阳-切换到回收页": {
               "enabled": false
+            },
+            "南阳-自动购买营养剂": {
+              "enabled": false
             }
           }
         },
@@ -9012,6 +9015,9 @@
               "enabled": true
             },
             "南阳-切换到回收页": {
+              "enabled": true
+            },
+            "南阳-自动购买营养剂": {
               "enabled": true
             }
           }
