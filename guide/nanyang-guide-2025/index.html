@@ -889,6 +889,10 @@
         max-height: 60vh;
         overflow-y: auto;
       }
+      .collection-picker {
+        width: 100%;
+        flex-basis: 100%;
+      }
       .order-picker-header {
         display: flex;
         align-items: center;
@@ -2126,7 +2130,7 @@
               <input
                 type="text"
                 v-model="orderQuery"
-                placeholder="搜索并添加订单所需的菌子..."
+                placeholder="搜索并添加订单所需的菌子...现已支持拼音及首字母搜索🍄"
                 @focus="orderPickerVisible = true"
                 @click="orderPickerVisible = true"
               />
@@ -2807,6 +2811,8 @@
               v-model="searchQuery"
               placeholder="搜索名称..."
               style="width: 200px"
+              @focus="handbookPickerVisible = true"
+              @click="handbookPickerVisible = true"
             />
             <button
               type="button"
@@ -2823,6 +2829,54 @@
             >
               需要确保游戏内图鉴时打开右上角没有新培育的提示，且第一个菌子是适中蓝莓味竹荪
             </span>
+          </div>
+          <div
+            v-if="handbookPickerVisible && !searchQuery"
+            class="order-results-wrap order-picker collection-picker"
+          >
+            <div class="order-picker-header">
+              <div class="order-subtitle">按类别查看</div>
+              <button
+                class="order-picker-close"
+                @click="handbookPickerVisible = false"
+              >
+                收起
+              </button>
+            </div>
+            <div v-if="handbookCategoryGroups.length" class="order-picker-tabs">
+              <button
+                v-for="group in handbookCategoryGroups"
+                :key="group.category"
+                class="order-picker-tab"
+                :class="{ active: handbookPickerCategory === group.category }"
+                @click="setHandbookPickerCategory(group.category)"
+              >
+                {{ group.category }}
+              </button>
+            </div>
+            <div v-if="handbookCategoryGroups.length === 0" class="order-empty">
+              暂无可选菌子
+            </div>
+            <div v-else class="order-picker-group">
+              <div class="order-results">
+                <div
+                  v-for="m in handbookActiveCategory.items"
+                  :key="m.id"
+                  class="order-result"
+                  @click="applyHandbookSearch(m.name)"
+                >
+                  <div class="target-img-box order-result-img">
+                    <img
+                      :src="getOrderTargetImgSrc(m.name)"
+                      class="target-img"
+                      @error="handleImgError"
+                      :alt="m.name"
+                    />
+                  </div>
+                  <div class="order-result-name">{{ m.name }}</div>
+                </div>
+              </div>
+            </div>
           </div>
           <label class="filter-switch">
             <input type="checkbox" v-model="showOnlyUncollected" />
@@ -6151,6 +6205,300 @@
         // "旧名字": "新名字"
       };
 
+      const PINYIN_MAP = {
+        "/": "/",
+        一: "yi",
+        不: "bu",
+        世: "shi",
+        中: "zhong",
+        丸: "wan",
+        之: "zhi",
+        习: "xi",
+        书: "shu",
+        二: "er",
+        云: "yun",
+        五: "wu",
+        亚: "ya",
+        人: "ren",
+        体: "ti",
+        余: "yu",
+        你: "ni",
+        健: "jian",
+        傲: "ao",
+        光: "guang",
+        公: "gong",
+        兵: "bing",
+        冠: "guan",
+        冰: "bing",
+        准: "zhun",
+        凉: "liang",
+        凑: "cou",
+        凡: "fan",
+        切: "qie",
+        刺: "ci",
+        劳: "lao",
+        厚: "hou",
+        厨: "chu",
+        口: "kou",
+        只: "zhi",
+        叭: "ba",
+        可: "ke",
+        台: "tai",
+        号: "hao",
+        名: "ming",
+        味: "wei",
+        商: "shang",
+        善: "shan",
+        喇: "la",
+        土: "tu",
+        地: "di",
+        坏: "huai",
+        型: "xing",
+        塘: "tang",
+        墨: "mo",
+        壶: "hu",
+        夕: "xi",
+        夜: "ye",
+        大: "da",
+        天: "tian",
+        太: "tai",
+        头: "tou",
+        奉: "feng",
+        女: "nv",
+        娇: "jiao",
+        孙: "sun",
+        学: "xue",
+        宅: "zhai",
+        宝: "bao",
+        实: "shi",
+        寒: "han",
+        寻: "xun",
+        封: "feng",
+        小: "xiao",
+        少: "shao",
+        尖: "jian",
+        山: "shan",
+        岩: "yan",
+        州: "zhou",
+        巢: "chao",
+        巧: "qiao",
+        巨: "ju",
+        常: "chang",
+        帽: "mao",
+        平: "ping",
+        幻: "huan",
+        幽: "you",
+        应: "ying",
+        庞: "pang",
+        康: "kang",
+        庸: "yong",
+        建: "jian",
+        开: "kai",
+        张: "zhang",
+        彩: "cai",
+        微: "wei",
+        心: "xin",
+        恶: "e",
+        戏: "xi",
+        手: "shou",
+        挑: "tiao",
+        描: "miao",
+        援: "yuan",
+        撞: "zhuang",
+        斑: "ban",
+        新: "xin",
+        无: "wu",
+        明: "ming",
+        星: "xing",
+        春: "chun",
+        普: "pu",
+        晶: "jing",
+        智: "zhi",
+        暗: "an",
+        木: "mu",
+        未: "wei",
+        朴: "pu",
+        松: "song",
+        板: "ban",
+        枫: "feng",
+        柏: "bai",
+        染: "ran",
+        标: "biao",
+        案: "an",
+        桩: "zhuang",
+        棒: "bang",
+        棘: "ji",
+        森: "sen",
+        椰: "ye",
+        毒: "du",
+        比: "bi",
+        毛: "mao",
+        水: "shui",
+        油: "you",
+        法: "fa",
+        泡: "pao",
+        洁: "jie",
+        洒: "sa",
+        浓: "nong",
+        淡: "dan",
+        深: "shen",
+        清: "qing",
+        渊: "yuan",
+        温: "wen",
+        湿: "shi",
+        溶: "rong",
+        滞: "zhi",
+        滴: "di",
+        漏: "lou",
+        潮: "chao",
+        火: "huo",
+        灯: "deng",
+        灵: "ling",
+        炎: "yan",
+        炒: "chao",
+        炬: "ju",
+        烛: "zhu",
+        烟: "yan",
+        燃: "ran",
+        爆: "bao",
+        爪: "zhao",
+        爱: "ai",
+        牛: "niu",
+        牵: "qian",
+        特: "te",
+        猪: "zhu",
+        猫: "mao",
+        猴: "hou",
+        玉: "yu",
+        珊: "shan",
+        珍: "zhen",
+        琴: "qin",
+        瑚: "hu",
+        瓷: "ci",
+        番: "fan",
+        痘: "dou",
+        瘦: "shou",
+        癖: "pi",
+        登: "deng",
+        白: "bai",
+        的: "de",
+        盏: "zhan",
+        看: "kan",
+        石: "shi",
+        矿: "kuang",
+        破: "po",
+        硕: "shuo",
+        碧: "bi",
+        社: "she",
+        祖: "zu",
+        种: "zhong",
+        竹: "zhu",
+        笨: "ben",
+        等: "deng",
+        筒: "tong",
+        粉: "fen",
+        系: "xi",
+        素: "su",
+        红: "hong",
+        纤: "xian",
+        级: "ji",
+        绒: "rong",
+        绝: "jue",
+        绣: "xiu",
+        绿: "lv",
+        缩: "suo",
+        美: "mei",
+        羽: "yu",
+        老: "lao",
+        肉: "rou",
+        胀: "zhang",
+        能: "neng",
+        膨: "peng",
+        般: "ban",
+        良: "liang",
+        色: "se",
+        芝: "zhi",
+        花: "hua",
+        苍: "cang",
+        茄: "jia",
+        草: "cao",
+        荧: "ying",
+        荪: "sun",
+        荷: "he",
+        莓: "mei",
+        莲: "lian",
+        菌: "jun",
+        菜: "cai",
+        萌: "meng",
+        营: "ying",
+        葛: "ge",
+        董: "dong",
+        蓝: "lan",
+        蓬: "peng",
+        蔫: "nian",
+        藕: "ou",
+        藤: "teng",
+        蛋: "dan",
+        螈: "yuan",
+        衣: "yi",
+        袖: "xiu",
+        裂: "lie",
+        西: "xi",
+        见: "jian",
+        规: "gui",
+        角: "jiao",
+        诩: "xu",
+        课: "ke",
+        谜: "mi",
+        豆: "dou",
+        象: "xiang",
+        贾: "jia",
+        超: "chao",
+        路: "lu",
+        身: "shen",
+        躺: "tang",
+        轻: "qing",
+        边: "bian",
+        过: "guo",
+        迷: "mi",
+        适: "shi",
+        逃: "tao",
+        通: "tong",
+        邪: "xie",
+        郃: "he",
+        酥: "su",
+        酪: "lao",
+        金: "jin",
+        铜: "tong",
+        销: "xiao",
+        锁: "suo",
+        长: "zhang",
+        阁: "ge",
+        阳: "yang",
+        阴: "yin",
+        阵: "zhen",
+        阿: "a",
+        陈: "chen",
+        陶: "tao",
+        陷: "xian",
+        隐: "yin",
+        青: "qing",
+        颈: "jing",
+        颜: "yan",
+        骑: "qi",
+        高: "gao",
+        魂: "hun",
+        魔: "mo",
+        鱼: "yu",
+        鳞: "lin",
+        鸟: "niao",
+        鸢: "yuan",
+        鹿: "lu",
+        黄: "huang",
+        黑: "hei",
+        龙: "long",
+      };
+
       const BRANCH_ORDER = [
         "柏木",
         "枫木",
@@ -6666,6 +7014,8 @@
             const searchQuery = ref("");
             const useIngameOrder = ref(false);
             const showOnlyUncollected = ref(false);
+            const handbookPickerVisible = ref(false);
+            const handbookPickerCategory = ref("");
             const orderQuery = ref("");
             const orderPickerVisible = ref(false);
             const orderPickerCategory = ref("");
@@ -6822,6 +7172,59 @@
 
             const normalizeMushroomId = (value) => {
               return resolveMushroomId(value) || value;
+            };
+
+            const normalizeSearchValue = (value) => {
+              return (value || "").toLowerCase().replace(/\s+/g, "");
+            };
+            const pinyinCache = new Map();
+            const pinyinInitialCache = new Map();
+            const toPinyin = (value) => {
+              const key = value || "";
+              if (pinyinCache.has(key)) return pinyinCache.get(key);
+              let result = "";
+              for (const ch of key) {
+                result += PINYIN_MAP[ch] || ch;
+              }
+              const normalized = normalizeSearchValue(result);
+              pinyinCache.set(key, normalized);
+              return normalized;
+            };
+            const toPinyinInitials = (value) => {
+              const key = value || "";
+              if (pinyinInitialCache.has(key))
+                return pinyinInitialCache.get(key);
+              let result = "";
+              for (const ch of key) {
+                const pinyin = PINYIN_MAP[ch];
+                if (pinyin) result += pinyin[0] || "";
+                else result += ch;
+              }
+              const normalized = normalizeSearchValue(result);
+              pinyinInitialCache.set(key, normalized);
+              return normalized;
+            };
+            const matchesSearchText = (value, rawQuery, normalizedQuery) => {
+              if (!rawQuery) return true;
+              const text = value || "";
+              if (text.includes(rawQuery)) return true;
+              if (!normalizedQuery) return true;
+              const normalizedText = normalizeSearchValue(text);
+              if (normalizedText.includes(normalizedQuery)) return true;
+              if (toPinyin(text).includes(normalizedQuery)) return true;
+              return toPinyinInitials(text).includes(normalizedQuery);
+            };
+            const matchesOrderSearch = (m, rawQuery, normalizedQuery) => {
+              if (!m) return false;
+              return (
+                matchesSearchText(m.name, rawQuery, normalizedQuery) ||
+                matchesSearchText(m.category, rawQuery, normalizedQuery) ||
+                matchesSearchText(m.branch, rawQuery, normalizedQuery)
+              );
+            };
+            const matchesHandbookSearch = (m, rawQuery, normalizedQuery) => {
+              if (!m) return false;
+              return matchesSearchText(m.name, rawQuery, normalizedQuery);
             };
 
             const getHistoryName = (log) => {
@@ -7086,20 +7489,16 @@
             });
 
             const orderCandidates = computed(() => {
-              const query = orderQuery.value.trim();
-              if (!query) return [];
+              const rawQuery = orderQuery.value.trim();
+              if (!rawQuery) return [];
+              const normalizedQuery = normalizeSearchValue(rawQuery);
               const selected = new Set(
                 orderDraft.items.map((item) => normalizeMushroomId(item.id))
               );
               return database
                 .filter((m) => !m.isFailed)
                 .filter((m) => !selected.has(m.id))
-                .filter(
-                  (m) =>
-                    m.name.includes(query) ||
-                    m.category.includes(query) ||
-                    m.branch.includes(query)
-                )
+                .filter((m) => matchesOrderSearch(m, rawQuery, normalizedQuery))
                 .slice(0, 12);
             });
             const normalizeOrderCategory = (value) => {
@@ -7127,11 +7526,13 @@
               ["小只", 0],
               ["微型", 0],
               ["清淡", 0],
+              ["小号", 0],
               ["常见", 1],
               ["常规", 1],
               ["普通", 1],
               ["寻常", 1],
               ["适中", 1],
+              ["中号", 1],
               ["中等", 1],
               ["中", 1],
               ["中级", 1],
@@ -7139,6 +7540,7 @@
               ["平凡", 1],
               ["路边", 1],
               ["中庸", 1],
+              ["大号", 2],
               ["超大", 2],
               ["庞大", 2],
               ["硕大", 2],
@@ -7210,6 +7612,9 @@
                 "超大型",
                 "小型",
                 "大型",
+                "小号",
+                "中号",
+                "大号",
                 "标准",
                 "通常",
               ])
@@ -7227,30 +7632,29 @@
               }
               return "";
             };
-            const orderCategoryGroups = computed(() => {
-              const selected = new Set(
-                orderDraft.items.map((item) => normalizeMushroomId(item.id))
-              );
+
+            const buildCategoryGroups = (options = {}) => {
+              const excludeIds = options.excludeIds || new Set();
+              const filterFn = options.filterFn;
+              const includeFailed = options.includeFailed === true;
+              const source = includeFailed
+                ? database
+                : database.filter((m) => !m.isFailed);
               const categoryOrder = [];
               const allCategoryItems = new Map();
               const coreById = new Map();
               const indexById = new Map();
-              database
-                .filter((m) => !m.isFailed)
-                .forEach((m) => {
-                  const category = normalizeOrderCategory(m.category);
-                  if (!allCategoryItems.has(category)) {
-                    allCategoryItems.set(category, []);
-                    categoryOrder.push(category);
-                  }
-                  const list = allCategoryItems.get(category);
-                  list.push(m);
-                  indexById.set(m.id, list.length - 1);
-                  coreById.set(
-                    m.id,
-                    stripOrderCategorySuffix(m.name, category)
-                  );
-                });
+              source.forEach((m) => {
+                const category = normalizeOrderCategory(m.category);
+                if (!allCategoryItems.has(category)) {
+                  allCategoryItems.set(category, []);
+                  categoryOrder.push(category);
+                }
+                const list = allCategoryItems.get(category);
+                list.push(m);
+                indexById.set(m.id, list.length - 1);
+                coreById.set(m.id, stripOrderCategorySuffix(m.name, category));
+              });
               const suffixFeatureById = new Map();
               allCategoryItems.forEach((items) => {
                 const cores = items.map((m) => coreById.get(m.id) || "");
@@ -7286,7 +7690,7 @@
                 });
               });
               const prefixRankById = new Map();
-              allCategoryItems.forEach((items, category) => {
+              allCategoryItems.forEach((items) => {
                 items.forEach((m) => {
                   const core = coreById.get(m.id) || "";
                   const feature = featureKeyById.get(m.id) || "";
@@ -7300,7 +7704,11 @@
               const groups = [];
               categoryOrder.forEach((category) => {
                 const items = allCategoryItems.get(category) || [];
-                const filtered = items.filter((m) => !selected.has(m.id));
+                const filtered = items.filter((m) => {
+                  if (excludeIds.has(m.id)) return false;
+                  if (filterFn && !filterFn(m)) return false;
+                  return true;
+                });
                 if (!filtered.length) return;
                 const featureGroups = new Map();
                 filtered.forEach((m) => {
@@ -7323,6 +7731,22 @@
                 groups.push({ category, items: ordered });
               });
               return groups;
+            };
+            const orderCategoryGroups = computed(() => {
+              const selected = new Set(
+                orderDraft.items.map((item) => normalizeMushroomId(item.id))
+              );
+              return buildCategoryGroups({ excludeIds: selected });
+            });
+            const handbookCategoryGroups = computed(() => {
+              const collectedSet = new Set(currentUser.value.collected || []);
+              const filterFn = showOnlyUncollected.value
+                ? (m) => !collectedSet.has(m.id)
+                : null;
+              return buildCategoryGroups({
+                filterFn,
+                includeFailed: true,
+              });
             });
             const orderActiveCategory = computed(() => {
               const groups = orderCategoryGroups.value;
@@ -7334,6 +7758,21 @@
             });
             const setOrderPickerCategory = (category) => {
               orderPickerCategory.value = category;
+            };
+            const handbookActiveCategory = computed(() => {
+              const groups = handbookCategoryGroups.value;
+              if (groups.length === 0) return { category: "", items: [] };
+              const active = groups.find(
+                (group) => group.category === handbookPickerCategory.value
+              );
+              return active || groups[0];
+            });
+            const setHandbookPickerCategory = (category) => {
+              handbookPickerCategory.value = category;
+            };
+            const applyHandbookSearch = (name) => {
+              searchQuery.value = name || "";
+              handbookPickerVisible.value = false;
             };
 
             const setOrderPreset = (preset) => {
@@ -8153,6 +8592,22 @@
               },
               { immediate: true }
             );
+            watch(
+              handbookCategoryGroups,
+              (groups) => {
+                if (!groups.length) {
+                  handbookPickerCategory.value = "";
+                  return;
+                }
+                const hasActive = groups.some(
+                  (group) => group.category === handbookPickerCategory.value
+                );
+                if (!hasActive) {
+                  handbookPickerCategory.value = groups[0].category;
+                }
+              },
+              { immediate: true }
+            );
 
             const addUser = () => {
               const name = prompt("请输入新用户名:");
@@ -8495,8 +8950,12 @@
             };
 
             const groupedDatabase = computed(() => {
+              const rawQuery = searchQuery.value.trim();
+              const normalizedQuery = normalizeSearchValue(rawQuery);
               let filtered = database.filter((m) => {
-                const matchName = m.name.includes(searchQuery.value);
+                const matchName = rawQuery
+                  ? matchesHandbookSearch(m, rawQuery, normalizedQuery)
+                  : true;
                 const matchCollected = showOnlyUncollected.value
                   ? !currentUser.value.collected.includes(m.id)
                   : true;
@@ -8845,6 +9304,8 @@
               searchQuery,
               useIngameOrder,
               showOnlyUncollected,
+              handbookPickerVisible,
+              handbookPickerCategory,
               orderQuery,
               orderPickerVisible,
               orderPickerCategory,
@@ -8863,6 +9324,10 @@
               orderCategoryGroups,
               orderActiveCategory,
               setOrderPickerCategory,
+              handbookCategoryGroups,
+              handbookActiveCategory,
+              setHandbookPickerCategory,
+              applyHandbookSearch,
               startNewOrder,
               setOrderPreset,
               addOrderItem,
