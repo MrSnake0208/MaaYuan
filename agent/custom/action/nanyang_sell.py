@@ -317,6 +317,11 @@ class NanyangSell(CustomAction):
                 return _stop_result()
             label = _SELL_LABEL_BY_TEMPLATE.get(template, template)
             logger.info(f"开始寻找 {label}")
+            img = _screencap(context)
+            found = self._try_find_and_click(context, img, template)
+            if found:
+                _wait_task(context, context.run_task(_SET_MAX_TASK))
+                continue
             _wait_task(context, context.run_task(_SCROLL_BOTTOM_TASK))
 
             img = _screencap(context)

@@ -219,6 +219,13 @@ class AutoFormation(CustomAction):
     def _convert(self, text: str) -> str:
         return convert(text or "", self._resource_lang)
 
+    def _convert_name(self, text: str) -> str:
+        """保留特定简体字形以匹配实际显示。"""
+        converted = self._convert(text or "")
+        if self._resource_lang == "zh-tw" and "群" in (text or ""):
+            return converted.replace("羣", "群")
+        return converted
+
     @staticmethod
     def get_last_plan() -> Dict:
         """供后续节点读取最近一次编队生成的方案信息。"""
@@ -370,7 +377,7 @@ class AutoFormation(CustomAction):
     def _recognize_target(
         self, context: Context, img, name: str, roi: Tuple[int, int, int, int]
     ):
-        expected = self._convert(name or "")
+        expected = self._convert_name(name or "")
         rec_param = {
             "expected": expected,
             "roi": list(roi),
@@ -498,7 +505,7 @@ class AutoFormation(CustomAction):
         self, context: Context, name: str, need_check_first: bool
     ) -> bool:
         attempts = 0
-        target_name = self._convert(name)
+        target_name = self._convert_name(name)
         fallback_names = self._generate_fallback_names(name)
         while attempts < self.MAX_SCROLL:
             if _should_stop_ctx(context):
