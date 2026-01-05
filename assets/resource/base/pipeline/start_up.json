@@ -1,13 +1,5 @@
 {
   "启动游戏版本": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "next": [
       "切换账号启动",
       "代号鸢港服",
@@ -20,37 +12,13 @@
     ]
   },
   "关闭游戏版本": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "focus": "如鸢/代号鸢 已关闭",
     "next": ["全关了tap"]
   },
   "启动再等等": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "post_delay": 5000
   },
   "代号鸢港服": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "enabled": false,
     "focus": "启动代号鸢港服",
     "next": [
@@ -65,6 +33,7 @@
       "[JumpBack]sub_活动弹窗关闭",
       "[JumpBack]sub_开出心纸君电话",
       "[JumpBack]sub_留音匣",
+      "[JumpBack]绣衣密信",
       "心纸君",
       "据点",
       "[JumpBack]sub_启动代号鸢港",
@@ -72,14 +41,6 @@
     ]
   },
   "如鸢Tap服": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "enabled": false,
     "focus": "启动如鸢Tap服",
     "next": [
@@ -95,6 +56,7 @@
       "[JumpBack]sub_活动弹窗关闭",
       "[JumpBack]sub_开出心纸君电话",
       "[JumpBack]sub_留音匣",
+      "[JumpBack]绣衣密信",
       "心纸君",
       "据点",
       "[JumpBack]sub_启动如鸢Tap",
@@ -102,14 +64,6 @@
     ]
   },
   "如鸢九游服": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "enabled": false,
     "focus": "启动如鸢九游服",
     "next": [
@@ -125,6 +79,7 @@
       "[JumpBack]sub_活动弹窗关闭",
       "[JumpBack]sub_开出心纸君电话",
       "[JumpBack]sub_留音匣",
+      "[JumpBack]绣衣密信",
       "心纸君",
       "据点",
       "[JumpBack]sub_启动如鸢九游",
@@ -132,14 +87,6 @@
     ]
   },
   "如鸢小米服": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "enabled": false,
     "focus": "启动如鸢小米服",
     "next": [
@@ -155,6 +102,7 @@
       "[JumpBack]sub_活动弹窗关闭",
       "[JumpBack]sub_开出心纸君电话",
       "[JumpBack]sub_留音匣",
+      "[JumpBack]绣衣密信",
       "心纸君",
       "据点",
       "[JumpBack]sub_启动如鸢小米",
@@ -162,14 +110,6 @@
     ]
   },
   "如鸢华为服": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "enabled": false,
     "focus": "启动如鸢华为服",
     "next": [
@@ -185,6 +125,7 @@
       "[JumpBack]sub_活动弹窗关闭",
       "[JumpBack]sub_开出心纸君电话",
       "[JumpBack]sub_留音匣",
+      "[JumpBack]绣衣密信",
       "心纸君",
       "据点",
       "[JumpBack]sub_启动如鸢华为",
@@ -192,14 +133,6 @@
     ]
   },
   "如鸢OPPO服": {
-    "recognition": {
-      "type": "DirectHit",
-      "param": {}
-    },
-    "action": {
-      "type": "DoNothing",
-      "param": {}
-    },
     "enabled": false,
     "focus": "启动如鸢OPPO服",
     "next": [
@@ -215,6 +148,7 @@
       "[JumpBack]sub_活动弹窗关闭",
       "[JumpBack]sub_开出心纸君电话",
       "[JumpBack]sub_留音匣",
+      "[JumpBack]绣衣密信",
       "心纸君",
       "据点",
       "[JumpBack]sub_启动如鸢OPPO",
@@ -245,6 +179,7 @@
       "[JumpBack]sub_活动弹窗关闭",
       "[JumpBack]sub_开出心纸君电话",
       "[JumpBack]sub_留音匣",
+      "[JumpBack]绣衣密信",
       "心纸君",
       "据点",
       "[JumpBack]sub_启动如鸢官",
@@ -319,6 +254,64 @@
     },
     "pre_delay": 300,
     "next": ["确认收取小鸟签到"]
+  },
+  "绣衣密信": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["密信"],
+        "roi": [228, 275, 257, 302]
+      }
+    },
+    "next": ["查看绣衣密信"]
+  },
+  "查看绣衣密信": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["查看"],
+        "roi": [58, 873, 589, 343]
+      }
+    },
+    "pre_delay": 500,
+    "action": {
+      "type": "Click"
+    },
+    "post_delay": 2000,
+    "next": ["收下绣衣密信", "[JumpBack]右滑绣衣密信"]
+  },
+  "收下绣衣密信": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["收下"],
+        "roi": [130, 971, 465, 221]
+      }
+    },
+    "pre_delay": 500,
+    "action": {
+      "type": "Click"
+    },
+    "post_delay": 3000
+  },
+  "右滑绣衣密信": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["右"],
+        "roi": [102, 997, 560, 232]
+      }
+    },
+    "pre_delay": 500,
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [108, 567, 1, 1],
+        "end": [624, 568, 1, 1],
+        "duration": 500
+      }
+    },
+    "post_delay": 2000
   },
   "心纸君": {
     "recognition": {
