@@ -7,7 +7,8 @@
       "TEM-进入南阳",
       "OCR-进入南阳",
       "[JumpBack]进入界面-活动",
-      "[JumpBack]退出各类popups"
+      "[JumpBack]退出各类popups",
+      "南阳-网络错误"
     ]
   },
   "TEM-进入南阳": {
@@ -24,7 +25,7 @@
     },
     "post_delay": 1000,
     "timeout": 4000,
-    "next": ["[JumpBack]南阳-自动收获", "已在界面-南阳"]
+    "next": ["[JumpBack]南阳-自动收获", "已在界面-南阳", "南阳-网络错误"]
   },
   "OCR-进入南阳": {
     "recognition": {
@@ -40,7 +41,7 @@
     },
     "post_delay": 1000,
     "timeout": 4000,
-    "next": ["[JumpBack]南阳-自动收获", "已在界面-南阳"]
+    "next": ["[JumpBack]南阳-自动收获", "已在界面-南阳", "南阳-网络错误"]
   },
   "南阳-自动收获": {
     "recognition": {
@@ -68,7 +69,7 @@
         "roi": [76, 1149, 131, 58]
       }
     },
-    "next": ["[JumpBack]南阳-领取每日奖励", "南阳-冷启动", "南阳-自动护理"],
+    "next": ["[JumpBack]南阳-领取每日奖励", "南阳-冷启动", "南阳-自动护理", "南阳-网络错误"],
     "post_delay": 1000,
     "timeout": 4000
   },
@@ -85,7 +86,7 @@
     "action": {
       "type": "Click"
     },
-    "next": ["南阳-冷启动-打开营养液补充界面"]
+    "next": ["南阳-冷启动-打开营养液补充界面", "南阳-网络错误"]
   },
   "南阳-冷启动-打开营养液补充界面": {
     "recognition": {
@@ -100,7 +101,7 @@
       "type": "Click"
     },
     "post_delay": 2000,
-    "next": ["最多", "南阳-冷启动-无营养液"]
+    "next": ["最多", "南阳-冷启动-无营养液", "南阳-网络错误"]
   },
   "南阳-冷启动-无营养液": {
     "recognition": {
@@ -117,7 +118,8 @@
     "next": [
       "南阳-切换到回收页",
       "南阳-自动购买营养剂",
-      "南阳-不买营养液-退出商店"
+      "南阳-不买营养液-退出商店",
+      "南阳-网络错误"
     ]
   },
   "南阳-不买营养液-退出商店": {
@@ -137,5 +139,88 @@
     },
     "focus": "不自动购买营养液，退出商店页面，任务终止",
     "post_delay": 2000
+  },
+  "南阳-网络错误": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "返回登",
+        "roi": [445, 753, 110, 36]
+      }
+    },
+    "pre_delay": 500,
+    "action": {
+      "type": "Click"
+    },
+    "post_delay": 4000,
+    "next": ["南阳-开始点击", "南阳-开始游戏", "南阳-已回到游戏"]
+  },
+  "南阳-开始游戏": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["开始游戏", "開始"],
+        "roi": [236, 1048, 235, 106]
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "pre_delay": 4000,
+    "post_wait_freezes": {
+      "time": 3500,
+      "target": [24, 0, 144, 52]
+    },
+    "next": [
+      "南阳-已回到游戏",
+      "[JumpBack]sub_大鸟签到",
+      "[JumpBack]sub_活动弹窗关闭",
+      "[JumpBack]sub_弹窗关闭",
+      "网络错误-返回登录",
+      "南阳-网络错误"
+    ]
+  },
+  "南阳-开始点击": {
+    "recognition": {
+      "type": "Or",
+      "param": {
+        "any_of": [
+          {
+            "recognition": "OCR",
+            "expected": ["點撃", "点击"],
+            "replace": [
+              ["擊", "撃"],
+              ["點舉", "點撃"]
+            ],
+            "roi": [222, 1086, 190, 106]
+          },
+          {
+            "recognition": "OCR",
+            "expected": "点击任意",
+            "roi": [222, 1086, 190, 106]
+          }
+        ]
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "next": ["南阳-开始游戏", "南阳-已回到游戏", "南阳-网络错误"]
+  },
+  "南阳-已回到游戏": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "mainmap/xinzhi.png",
+        "roi": [226, 1021, 137, 155]
+      }
+    },
+    "next": [
+      "[JumpBack]sub_大鸟签到",
+      "[JumpBack]sub_活动弹窗关闭",
+      "[JumpBack]sub_弹窗关闭",
+      "南阳-网络错误"
+    ],
+    "on_error": ["start_南阳"]
   }
 }
