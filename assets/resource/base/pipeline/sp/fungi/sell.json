@@ -61,7 +61,7 @@
     "post_delay": 2000,
     "next": ["[JumpBack]南阳-回收确认弹窗", "南阳-确认回收奖励"],
     "on_error": ["南阳-无回收"],
-    "timeout": 7000
+    "timeout": 15000
   },
   "南阳-无回收": {
     "focus": "没有回收菌子，尝试购买营养剂",
@@ -93,6 +93,30 @@
     },
     "pre_delay": 500,
     "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "OcrReport",
+        "custom_action_param": {
+          "recognition": "南阳-看看卖了多少钱",
+          "format": "本次售出菌子后获得了 {result} 蘑菇力",
+          "export": true,
+          "filename": "NanyangReport"
+        }
+      }
+    },
+    "next": ["南阳-退出回收奖励"]
+  },
+  "南阳-退出回收奖励": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": ["common_reward.png"],
+        "green_mask": true,
+        "threshold": 0.5,
+        "roi": [21, 37, 678, 651]
+      }
+    },
+    "action": {
       "type": "Click",
       "param": {
         "target": [533, 23, 20, 5]
@@ -100,8 +124,31 @@
     },
     "post_delay": 2000,
     "next": ["南阳-自动购买营养剂"],
-    "on_error": ["南阳-确认回收奖励"],
+    "on_error": ["南阳-退出回收奖励"],
     "timeout": 15000
+  },
+  "南阳-看看卖了多少钱": {
+    "recognition": {
+      "type": "Custom",
+      "param": {
+        "custom_recognition": "ColorOCRWithFallback",
+        "custom_recognition_param": {
+          "target_color": [206, 205, 202],
+          "tolerance": 55,
+          "recognition": "南阳-收获价格识别"
+        }
+      }
+    }
+  },
+  "南阳-收获价格识别": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "model": "en",
+        "only_rec": true,
+        "roi": [367, 624, 58, 44]
+      }
+    }
   },
   "南阳-下滑到回收底端": {
     "action": {
@@ -112,7 +159,7 @@
         "duration": 500
       }
     },
-    "repeat": 10,
+    "repeat": 20,
     "repeat_delay": 500,
     "post_delay": 2000
   },
