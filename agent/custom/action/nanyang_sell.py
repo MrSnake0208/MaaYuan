@@ -329,7 +329,7 @@ class NanyangSell(CustomAction):
             img = _screencap(context)
             found = self._try_find_and_click(context, img, template)
             if found:
-                _wait_task(context, context.run_task(_SET_MAX_TASK))
+                self._set_max_count(context, template)
                 continue
             _wait_task(context, context.run_task(_SCROLL_BOTTOM_TASK))
 
