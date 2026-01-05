@@ -41,7 +41,14 @@
     "on_error": ["南阳-无礼包"],
     "timeout": 4000
   },
-  "南阳-无礼包": {},
+  "南阳-无礼包": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [666, 145, 16, 13]
+      }
+    }
+  },
   "南阳-点击免费礼包": {
     "recognition": {
       "type": "OCR",
