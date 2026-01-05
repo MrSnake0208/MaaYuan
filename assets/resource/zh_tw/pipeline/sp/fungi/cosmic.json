@@ -23,6 +23,7 @@
     "action": {
       "type": "Click"
     },
+    "post_delay": 1500,
     "next": ["南阳-选择目的地", "南阳-网络错误"]
   },
   "南阳-选择目的地": {
@@ -30,7 +31,12 @@
       "type": "Click"
     },
     "post_delay": 1000,
-    "next": ["南阳-准备出发", "南阳-网络错误"]
+    "next": ["南阳-准备出发", "南阳-网络错误"],
+    "on_error": ["南阳-掉落已齐"],
+    "timeout": 3000
+  },
+  "南阳-掉落已齐": {
+    "focus": "当前星球的稀有掉落已集齐，请更换目的地或取消【获得所有稀有掉落后停止】的选项"
   },
   "南阳-准备出发": {
     "recognition": {
@@ -79,7 +85,8 @@
         "target": [680, 380]
       }
     },
-    "next": ["南阳-点击出发", "南阳-网络错误"]
+    "post_delay": 2000,
+    "next": ["南阳-准备检测子弹", "南阳-点击出发", "南阳-网络错误"]
   },
   "南阳-识别当前体力": {
     "recognition": {
@@ -161,7 +168,41 @@
         "target": [347, 1177, 33, 33]
       }
     },
-    "next": ["南阳-在宇宙", "南阳-补充体力", "[JumpBack]南阳-闭眼点点", "南阳-网络错误"]
+    "next": [
+      "[JumpBack]南阳-进门宝箱",
+      "南阳-在宇宙",
+      "南阳-补充体力",
+      "[JumpBack]南阳-闭眼点点",
+      "南阳-网络错误"
+    ]
+  },
+  "南阳-进门宝箱": {
+    "max_hit": 1,
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": ["返航"],
+        "roi": [24, 0, 179, 152]
+      }
+    },
+    "next": ["南阳-点击进门宝箱"]
+  },
+  "南阳-点击进门宝箱": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": ["nanyang/loot.png"],
+        "green_mask": true,
+        "order_by": "Vertical",
+        "threshold": [0.75],
+        "index": -1,
+        "roi": [12, 110, 700, 976]
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "next": ["南阳-打开宝箱", "南阳-网络错误"]
   },
   "南阳-闭眼点点": {
     "action": {
@@ -196,6 +237,7 @@
         "template": ["nanyang/loot.png"],
         "green_mask": true,
         "order_by": "Vertical",
+        "threshold": [0.75],
         "index": -1,
         "roi": [12, 110, 700, 976]
       }
@@ -210,20 +252,25 @@
     "recognition": {
       "type": "OCR",
       "param": {
-        "expected": ["打开"]
+        "expected": ["打开", "打"]
       }
     },
     "pre_delay": 500,
     "action": {
       "type": "Click"
     },
-    "next": ["南阳-补充体力", "[JumpBack]南阳-飞不动了", "南阳-获得宝箱奖励", "南阳-网络错误"]
+    "next": [
+      "南阳-补充体力",
+      "[JumpBack]南阳-飞不动了",
+      "南阳-获得宝箱奖励",
+      "南阳-网络错误"
+    ]
   },
   "南阳-获得宝箱奖励": {
     "recognition": {
       "type": "OCR",
       "param": {
-        "expected": ["获得"],
+        "expected": ["获得", "獲得"],
         "roi": [210, 154, 308, 143]
       }
     },
@@ -234,7 +281,7 @@
         "target": [303, 56, 30, 19]
       }
     },
-    "post_delay": 1000
+    "post_delay": 3000
   },
   "南阳-发现星星": {
     "enabled": false,
@@ -303,7 +350,7 @@
         "target": [698, 191]
       }
     },
-    "post_delay": 1500
+    "post_delay": 2500
   },
   "南阳-在顶端": {
     "recognition": {
@@ -390,7 +437,13 @@
       }
     },
     "pre_delay": 500,
-    "next": ["南阳-开始攻击星球", "南阳-离开", "南阳-网络错误"]
+    "next": [
+      "南阳-开始攻击星球",
+      "南阳-开始攻击星球-油",
+      "南阳-开始攻击星球-水",
+      "南阳-离开",
+      "南阳-网络错误"
+    ]
   },
   "南阳-离开": {
     "action": {
@@ -415,7 +468,8 @@
       "param": {
         "target": [214, 277, 67, 56]
       }
-    }
+    },
+    "post_delay": 3000
   },
   "南阳-已离开": {},
   "南阳-开始攻击星球": {
@@ -425,7 +479,8 @@
         "template": [
           "nanyang/axlm_unobtained.png",
           "nanyang/qntm_unobtained.png",
-          "nanyang/xncjh_unobtained.png"
+          "nanyang/xncjh_unobtained.png",
+          "nanyang/oil2.png"
         ],
         "roi": [16, 129, 699, 1000]
       }
@@ -445,6 +500,54 @@
       "南阳-网络错误"
     ]
   },
+  "南阳-开始攻击星球-油": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": ["nanyang/oil2.png"],
+        "roi": [16, 129, 699, 1000]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": "南阳-可以攻击星球"
+      }
+    },
+    "focus": "开始攻击掉落珍品灯油的星球",
+    "next": [
+      "[JumpBack]南阳-飞不动了",
+      "南阳-补充体力",
+      "[JumpBack]南阳-自动攻击",
+      "南阳-装填子弹",
+      "南阳-成功占领星球",
+      "南阳-网络错误"
+    ]
+  },
+  "南阳-开始攻击星球-水": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": ["nanyang/lotion.png"],
+        "roi": [16, 129, 699, 1000]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": "南阳-可以攻击星球"
+      }
+    },
+    "focus": "开始攻击掉落珍品保湿水的星球",
+    "next": [
+      "[JumpBack]南阳-飞不动了",
+      "南阳-补充体力",
+      "[JumpBack]南阳-自动攻击",
+      "南阳-装填子弹",
+      "南阳-成功占领星球",
+      "南阳-网络错误"
+    ]
+  },
   "南阳-继续攻击星球": {
     "recognition": {
       "type": "FeatureMatch",
@@ -454,7 +557,12 @@
         "count": 10
       }
     },
-    "next": ["[JumpBack]南阳-自动攻击", "南阳-装填子弹", "南阳-成功占领星球", "南阳-网络错误"]
+    "next": [
+      "[JumpBack]南阳-自动攻击",
+      "南阳-装填子弹",
+      "南阳-成功占领星球",
+      "南阳-网络错误"
+    ]
   },
   "南阳-补充体力": {
     "recognition": {
