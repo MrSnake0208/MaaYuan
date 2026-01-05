@@ -16,6 +16,7 @@ _SELL_TEMPLATES = [
 
 _FIND_NODE = "南阳-找到要卖的菌"
 _PRICE_NODE = "南阳-检测菌的价格"
+_PRICE_COLOR_NODE = "南阳-检查菌的价格ColorOCR"
 _SCROLL_BOTTOM_TASK = "南阳-下滑到回收底端"
 _PREPARE_UP_TASK = "南阳-准备向上寻找要卖的菌"
 _SCROLL_UP_TASK = "南阳-向上寻找要卖的菌"
@@ -32,6 +33,7 @@ _EXPECTED_PRICE_BY_TEMPLATE = {
     "nanyang/forsell1.png": "3",
     "nanyang/forsell2.png": "9",
     "nanyang/forsell3.png": "1",
+    "nanyang/forsell4.png": "1",
 }
 
 _SELL_LABEL_BY_TEMPLATE = {
@@ -206,7 +208,14 @@ def _run_price_check(context: Context, img, box, expected: str):
             }
         }
     }
-    return context.run_recognition(_PRICE_NODE, img, override)
+    try:
+        new_context = context.clone()
+    except Exception:
+        new_context = None
+    if new_context:
+        new_context.override_pipeline(override)
+        return new_context.run_recognition(_PRICE_COLOR_NODE, img)
+    return context.run_recognition(_PRICE_COLOR_NODE, img, override)
 
 
 def _get_hit_box(detail):

@@ -15,4 +15,6 @@ __all__ = [
     "CheckStopping",
     "NanyangStamina",
     "NanyangCheckBullets",
+    "ColorOCR",
+    "ColorOCRWithFallback",
 ]

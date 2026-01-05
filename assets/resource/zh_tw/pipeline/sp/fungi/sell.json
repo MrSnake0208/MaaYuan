@@ -98,7 +98,30 @@
       }
     },
     "post_delay": 2000,
-    "next": ["南阳-自动购买营养剂"]
+    "next": ["南阳-自动购买营养剂"],
+    "on_error": ["南阳-确认回收奖励"],
+    "timeout": 15000
+  },
+  "南阳-看看卖了多少钱": {
+    "recognition": {
+      "type": "Custom",
+      "param": {
+        "custom_recognition": "ColorOCR",
+        "custom_recognition_param": {
+          "target_color": [206, 205, 202],
+          "tolerance": 55,
+          "recognition": "南阳-收获价格识别"
+        }
+      }
+    }
+  },
+  "南阳-收获价格识别": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "roi": [367, 624, 58, 44]
+      }
+    }
   },
   "南阳-下滑到回收底端": {
     "action": {
@@ -149,10 +172,24 @@
       }
     }
   },
+  "南阳-检查菌的价格ColorOCR": {
+    "recognition": {
+      "type": "Custom",
+      "param": {
+        "custom_recognition": "ColorOCRWithFallback",
+        "custom_recognition_param": {
+          "target_color": [99, 55, 25],
+          "tolerance": 150,
+          "recognition": "南阳-检测菌的价格"
+        }
+      }
+    }
+  },
   "南阳-检测菌的价格": {
     "recognition": {
       "type": "OCR",
       "param": {
+        "model": "en",
         "replace": [
           ["©", "1"],
           ["\\?", "1"]
