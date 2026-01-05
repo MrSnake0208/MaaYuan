@@ -4892,9 +4892,9 @@
           isFailed: false,
         },
         {
-          id: "ny-1xj8mwe",
+          id: "ny-1on25zx",
           category: "猴头菌",
-          name: "微小宅宅猴头菌",
+          name: "超级逃课猴头菌",
           branch: "绝世名琴",
           lamp: "火炬",
           waterer: "小鸟长颈壶",
@@ -4914,10 +4914,9 @@
           isFailed: false,
         },
         {
-          id: "ny-1on25zx",
+          id: "ny-1xj8mwe",
           category: "猴头菌",
-          name: "超级逃课猴头菌",
-          branch: "绝世名琴",
+          name: "微小宅宅猴头菌",
           lamp: "火炬",
           waterer: "小鸟长颈壶",
           time: "白天",
@@ -7219,7 +7218,10 @@
               const trimmed = (core || "").trim();
               if (!trimmed) return "";
               for (const token of orderPrefixTokens) {
-                if (trimmed.startsWith(token) && trimmed.length > token.length) {
+                if (
+                  trimmed.startsWith(token) &&
+                  trimmed.length > token.length
+                ) {
                   return trimmed.slice(token.length);
                 }
               }
@@ -7244,7 +7246,10 @@
                   const list = allCategoryItems.get(category);
                   list.push(m);
                   indexById.set(m.id, list.length - 1);
-                  coreById.set(m.id, stripOrderCategorySuffix(m.name, category));
+                  coreById.set(
+                    m.id,
+                    stripOrderCategorySuffix(m.name, category)
+                  );
                 });
               const suffixFeatureById = new Map();
               allCategoryItems.forEach((items) => {
@@ -8946,5 +8951,3 @@
     </script>
   </body>
 </html>
-
-
