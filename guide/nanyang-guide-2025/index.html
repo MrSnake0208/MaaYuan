@@ -1786,6 +1786,35 @@
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
         font-weight: 600;
       }
+      .order-preview-tip {
+        position: fixed;
+        z-index: 999;
+        background: white;
+        border: 1px solid #e4e4e4;
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        pointer-events: none;
+      }
+      .order-preview-img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border-radius: 10px;
+        background: #f7f7f7;
+      }
+      .order-preview-name {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #444;
+        text-align: center;
+        max-width: 150px;
+        word-break: break-word;
+      }
       .order-count {
         font-size: 0.7rem;
         color: #4f6b9b;
@@ -2552,6 +2581,22 @@
             <span :class="line.className">{{ line.value }}</span>
           </div>
         </div>
+        <div
+          v-if="orderPreviewTip.visible"
+          class="order-preview-tip"
+          :style="{
+            left: orderPreviewTip.x + 'px',
+            top: orderPreviewTip.y + 'px',
+          }"
+        >
+          <img
+            :src="orderPreviewTip.src"
+            :alt="orderPreviewTip.name"
+            class="order-preview-img"
+            @error="$event.target.style.display = 'none'"
+          />
+          <div class="order-preview-name">{{ orderPreviewTip.name }}</div>
+        </div>
 
         <div
           class="order-float"
@@ -2682,6 +2727,9 @@
             <div v-if="readyOrders.length" class="order-float-collapsed-hint">
               🟢可交付订单
             </div>
+            <div v-if="panelNotice" class="order-float-collapsed-hint">
+              🟡可撤销记录
+            </div>
             <button
               type="button"
               class="order-float-expand"
@@ -2750,13 +2798,6 @@
                 @click="togglePinPlan(rec)"
               >
                 {{ isPlanPinned(rec) ? '📌' : '置顶' }}
-              </button>
-              <button
-                class="rec-copy"
-                title="复制方案代码"
-                @click="copyPlanCode(rec)"
-              >
-                复制到 MaaYuan
               </button>
               <span
                 v-if="
@@ -2862,7 +2903,12 @@
                 }"
                 @click="requestOrderIncrement(t.id, 'order-target')"
               >
-                <div class="target-img-box">
+                <div
+                  class="target-img-box"
+                  @mouseenter="showOrderPreview(t, $event, true)"
+                  @mousemove="moveOrderPreview($event)"
+                  @mouseleave="hideOrderPreview"
+                >
                   <img
                     :src="getMushroomImgSrc(t.category, t.condition)"
                     class="target-img"
@@ -2917,7 +2963,12 @@
                     : handleCollectionClick(m.id, rec)
                 "
               >
-                <div class="target-img-box">
+                <div
+                  class="target-img-box"
+                  @mouseenter="showOrderPreview(m, $event)"
+                  @mousemove="moveOrderPreview($event)"
+                  @mouseleave="hideOrderPreview"
+                >
                   <img
                     :src="getMushroomImgSrc(m.category, m.condition)"
                     class="target-img"
@@ -4414,9 +4465,9 @@
           isFailed: false,
         },
         {
-          id: "ny-1el9qms",
+          id: "ny-1577jn2",
           category: "竹荪",
-          name: "清淡番茄味竹荪",
+          name: "浓厚黄花菜味竹荪",
           branch: "黄金建木",
           lamp: "羽绒无烟灯",
           waterer: "竹筒滴漏",
@@ -4425,9 +4476,9 @@
           isFailed: false,
         },
         {
-          id: "ny-1577jn2",
+          id: "ny-1el9qms",
           category: "竹荪",
-          name: "浓厚黄花菜味竹荪",
+          name: "清淡番茄味竹荪",
           branch: "黄金建木",
           lamp: "羽绒无烟灯",
           waterer: "竹筒滴漏",
@@ -4435,6 +4486,7 @@
           condition: "消食片",
           isFailed: false,
         },
+
         {
           id: "ny-6bmkgcq",
           category: "宝石菌",
@@ -7387,6 +7439,13 @@
               y: 0,
               lines: [],
             });
+            const orderPreviewTip = reactive({
+              visible: false,
+              x: 0,
+              y: 0,
+              name: "",
+              src: "",
+            });
 
             const scrollToElement = (targetRef) => {
               if (!targetRef || !targetRef.value) return;
@@ -7589,6 +7648,28 @@
             };
             const hideOrderHoverTip = () => {
               orderHoverTip.visible = false;
+            };
+            const updateOrderPreviewPosition = (event) => {
+              if (!event) return;
+              const offsetX = 16;
+              const offsetY = 16;
+              orderPreviewTip.x = event.clientX + offsetX;
+              orderPreviewTip.y = event.clientY + offsetY;
+            };
+            const showOrderPreview = (m, event, allowInRec = false) => {
+              if (!allowInRec && currentTab.value !== "order") return;
+              if (!m || !m.name) return;
+              orderPreviewTip.name = m.name;
+              orderPreviewTip.src = getOrderTargetImgSrc(m.name);
+              orderPreviewTip.visible = true;
+              updateOrderPreviewPosition(event);
+            };
+            const moveOrderPreview = (event) => {
+              if (!orderPreviewTip.visible) return;
+              updateOrderPreviewPosition(event);
+            };
+            const hideOrderPreview = () => {
+              orderPreviewTip.visible = false;
             };
 
             const idToMushroom = new Map(database.map((m) => [m.id, m]));
@@ -9828,6 +9909,7 @@
               panelNotice,
               undoPanelNotice,
               focusOrderId,
+              orderPreviewTip,
               focusOrderCard,
               isLongTimeMushroom,
               hasLongTimeInPlan,
@@ -9840,6 +9922,9 @@
               showOrderHoverTip,
               moveOrderHoverTip,
               hideOrderHoverTip,
+              showOrderPreview,
+              moveOrderPreview,
+              hideOrderPreview,
               users,
               currentUserIndex,
               currentUser,
