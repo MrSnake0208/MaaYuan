@@ -8952,12 +8952,13 @@
       "cases": [
         {
           "name": "No",
+          "option": ["Maa查岗间隔"],
           "pipeline_override": {
             "收取菌子1": {
               "enabled": false
             },
             "继续护理": {
-              "post_delay": 60000
+              "post_delay": 10000
             }
           }
         },
@@ -8970,6 +8971,23 @@
           }
         }
       ]
+    },
+    "Maa查岗间隔": {
+      "type": "input",
+      "inputs": [
+        {
+          "name": "interval",
+          "label": "Maa查岗间隔（毫秒）",
+          "description": "不辅助收菌子的Maa会通过摸鱼来保护你的电脑（？）。单位是毫秒（1秒=1000毫秒）。默认值是Maa会每20秒看一次模拟器画面。",
+          "pipeline_type": "int",
+          "default": "20000"
+        }
+      ],
+      "pipeline_override": {
+        "继续护理": {
+          "post_delay": "{interval}"
+        }
+      }
     },
     "自动补充营养液": {
       "type": "switch",

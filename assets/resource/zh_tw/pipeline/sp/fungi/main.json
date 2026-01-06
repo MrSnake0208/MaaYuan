@@ -149,13 +149,16 @@
     "recognition": {
       "type": "OCR",
       "param": {
-        "expected": "返回登",
-        "roi": [445, 753, 110, 36]
+        "expected": ["返回登", "重新登"],
+        "roi": [167, 556, 409, 112]
       }
     },
     "pre_delay": 500,
     "action": {
-      "type": "Click"
+      "type": "Click",
+      "param": {
+        "target": [327, 785, 81, 27]
+      }
     },
     "post_delay": 4000,
     "focus": "检测到网络错误，正在尝试回到游戏",
