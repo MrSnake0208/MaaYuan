@@ -510,6 +510,15 @@
         font-weight: 600;
         color: #444;
       }
+      .rec-config .rarity-common {
+        color: #2b6cb0;
+      }
+      .rec-config .rarity-rare {
+        color: #7a3ed1;
+      }
+      .rec-config .rarity-legend {
+        color: #b8860b;
+      }
       .rec-config-tip {
         margin-left: auto;
         font-size: 0.9rem;
@@ -594,6 +603,39 @@
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         z-index: 12;
         pointer-events: none;
+      }
+      .target-tags {
+        position: absolute;
+        left: 2px;
+        top: 2px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        z-index: 12;
+        pointer-events: none;
+      }
+      .target-tag {
+        font-size: 0.62rem;
+        padding: 2px 4px;
+        border-radius: 999px;
+        font-weight: 600;
+        color: white;
+        text-align: center;
+      }
+      .tag-immortal {
+        background: rgba(212, 175, 55, 0.95);
+      }
+      .tag-easy {
+        background: rgba(76, 175, 80, 0.92);
+      }
+      .tag-normal {
+        background: rgba(255, 167, 38, 0.92);
+      }
+      .tag-hard {
+        background: rgba(239, 108, 0, 0.92);
+      }
+      .tag-jail {
+        background: rgba(117, 117, 117, 0.92);
       }
       .target-placeholder {
         font-size: 24px;
@@ -843,6 +885,18 @@
         flex-direction: column;
         gap: 6px;
       }
+      .order-reward-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .order-reward-row input[type="number"] {
+        width: 120px;
+      }
+      .order-reward-label {
+        font-size: 0.8rem;
+        color: #666;
+      }
       .order-presets {
         display: flex;
         flex-wrap: wrap;
@@ -983,6 +1037,23 @@
       .order-result:hover .order-result-name {
         color: var(--primary);
       }
+      .handbook-result {
+        position: relative;
+      }
+      .handbook-result.collected {
+        background-color: #f1f8e9;
+        border-color: #c5e1a5;
+        opacity: 0.6;
+      }
+      .handbook-result.is-pending {
+        background-color: #fff7e8;
+        border-color: var(--warning);
+        border-style: dashed;
+      }
+      .handbook-result.is-locked {
+        filter: grayscale(1);
+        opacity: 0.6;
+      }
       .order-result-name {
         font-weight: 600;
         color: #444;
@@ -1093,6 +1164,15 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         gap: 12px;
+      }
+      .order-list-note {
+        margin-top: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: #fff7e8;
+        color: #8a6d3b;
+        font-size: 0.8rem;
+        line-height: 1.5;
       }
       .order-card {
         background: white;
@@ -1617,6 +1697,17 @@
       .order-card-title {
         font-weight: 600;
         color: #444;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .order-reward {
+        font-size: 0.7rem;
+        color: #9a6a00;
+        background: #fff3cf;
+        border-radius: 999px;
+        padding: 2px 8px;
       }
       .order-card-actions {
         display: flex;
@@ -1642,6 +1733,58 @@
         align-items: center;
         gap: 6px;
         text-align: center;
+        position: relative;
+      }
+      .order-target-tip {
+        position: fixed;
+        left: 0;
+        top: 0;
+        background: rgba(35, 35, 35, 0.95);
+        color: white;
+        font-size: 0.65rem;
+        line-height: 1.4;
+        padding: 6px 8px;
+        border-radius: 8px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+        z-index: 999;
+        display: inline-flex;
+        flex-direction: column;
+        gap: 2px;
+        pointer-events: none;
+      }
+      .order-target-tip-line {
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .order-target-tip-key {
+        color: rgba(255, 255, 255, 0.75);
+      }
+      .order-target-tip .tooltip-rarity-common {
+        color: #7db9ff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        font-weight: 600;
+      }
+      .order-target-tip .tooltip-rarity-rare {
+        color: #c9a1ff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        font-weight: 600;
+      }
+      .order-target-tip .tooltip-rarity-legend {
+        color: #ffd46a;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        font-weight: 600;
+      }
+      .order-target-tip .tooltip-condition-soup {
+        color: #ffcf6a;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        font-weight: 600;
+      }
+      .order-target-tip .tooltip-condition-tablet {
+        color: #ff8a8a;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        font-weight: 600;
       }
       .order-count {
         font-size: 0.7rem;
@@ -2115,6 +2258,14 @@
           <div v-if="orderFormVisible" class="order-form">
             <div class="order-name-row">
               <input type="text" v-model="orderDraft.name" placeholder="单主" />
+              <div class="order-reward-row">
+                <span class="order-reward-label">报酬</span>
+                <input
+                  type="number"
+                  min="0"
+                  v-model.number="orderDraft.reward"
+                />
+              </div>
               <div class="order-presets">
                 <button
                   v-for="preset in orderPresets"
@@ -2130,7 +2281,7 @@
               <input
                 type="text"
                 v-model="orderQuery"
-                placeholder="搜索并添加订单所需的菌子...现已支持拼音及首字母搜索🍄"
+                placeholder="搜索并添加订单所需的菌子...可用拼音"
                 @focus="orderPickerVisible = true"
                 @click="orderPickerVisible = true"
               />
@@ -2271,6 +2422,10 @@
             </div>
           </div>
           <div v-if="orders.length">
+            <div v-if="!orderListCollapsed" class="order-list-note">
+              目前菌子左上角的难易度tag仅作试验，不完全具有参考价值，建议查看鼠标指向图片（手机/平板点图片大概也会有？）时显示的具体条件。<br />欢迎在小红书反馈实际感受及调整建议
+              @Nope 或 @麻圆（不识字版）
+            </div>
             <div v-if="!orderListCollapsed" class="order-list">
               <div
                 v-for="order in orders"
@@ -2286,6 +2441,9 @@
                 <div class="order-card-header">
                   <div class="order-card-title">
                     {{ formatOrderName(order.name) }}
+                    <span class="order-reward"
+                      >报酬 {{ getOrderReward(order) }}</span
+                    >
                   </div>
                   <div class="order-card-actions">
                     <button
@@ -2325,13 +2483,34 @@
                     class="order-item-cell"
                     :class="{ 'order-met': isOrderItemMet(item.id, item.required) }"
                   >
-                    <div class="target-img-box">
+                    <div
+                      class="target-img-box"
+                      @mouseenter="showOrderHoverTip(item.id, $event)"
+                      @mousemove="moveOrderHoverTip($event)"
+                      @mouseleave="hideOrderHoverTip"
+                    >
                       <img
                         :src="getOrderTargetImgSrc(getOrderItemName(item.id))"
                         class="target-img"
                         @error="handleImgError"
                         :alt="getOrderItemName(item.id)"
                       />
+                      <div class="target-tags">
+                        <div
+                          v-if="getLegendaryCount(item.id) > 0"
+                          class="target-tag tag-immortal"
+                          :style="getImmortalTagStyle(item.id)"
+                        >
+                          仙
+                        </div>
+                        <div
+                          v-if="getComplexityLabel(item.id)"
+                          class="target-tag"
+                          :class="getComplexityClass(item.id)"
+                        >
+                          {{ getComplexityLabel(item.id) }}
+                        </div>
+                      </div>
                       <div
                         v-if="isLongTimeMushroom(getOrderItemName(item.id))"
                         class="long-time-tag"
@@ -2355,6 +2534,23 @@
             <div v-else class="order-empty">订单列表已收起</div>
           </div>
           <div v-else class="order-empty">暂未添加订单</div>
+        </div>
+        <div
+          v-if="orderHoverTip.visible"
+          class="order-target-tip"
+          :style="{
+            left: orderHoverTip.x + 'px',
+            top: orderHoverTip.y + 'px',
+          }"
+        >
+          <div
+            v-for="(line, idx) in orderHoverTip.lines"
+            :key="`order-tip-${idx}`"
+            class="order-target-tip-line"
+          >
+            <span class="order-target-tip-key">{{ line.label }}</span>
+            <span :class="line.className">{{ line.value }}</span>
+          </div>
         </div>
 
         <div
@@ -2578,11 +2774,26 @@
             </div>
           </div>
           <div class="rec-config">
-            <span>🪵 {{ rec.branch }}</span>
+            <span>
+              🪵
+              <span :class="getRarityClass('branch', rec.branch)">
+                {{ rec.branch }}
+              </span>
+            </span>
             <span style="color: #666">+</span>
-            <span>💡 {{ rec.lamp === '/' ? '无/任意' : rec.lamp }}</span>
+            <span>
+              💡
+              <span :class="getRarityClass('lamp', rec.lamp)">
+                {{ rec.lamp === '/' ? '无/任意' : rec.lamp }}
+              </span>
+            </span>
             <span style="color: #666">+</span>
-            <span>💧 {{ rec.waterer === '/' ? '无/任意' : rec.waterer }}</span>
+            <span>
+              💧
+              <span :class="getRarityClass('waterer', rec.waterer)">
+                {{ rec.waterer === '/' ? '无/任意' : rec.waterer }}
+              </span>
+            </span>
             <span v-if="hasLongTimeInPlan(rec)" class="rec-config-tip"
               >有⌚标记的菌子的生长时间更久，使用道具前记得检查一下</span
             >
@@ -2809,8 +3020,8 @@
             <input
               type="text"
               v-model="searchQuery"
-              placeholder="搜索名称..."
-              style="width: 200px"
+              placeholder="搜索名称...偷偷支持了拼音和首字母搜索"
+              style="width: 260px"
               @focus="handbookPickerVisible = true"
               @click="handbookPickerVisible = true"
             />
@@ -2862,8 +3073,13 @@
                 <div
                   v-for="m in handbookActiveCategory.items"
                   :key="m.id"
-                  class="order-result"
-                  @click="applyHandbookSearch(m.name)"
+                  class="order-result handbook-result"
+                  :class="{
+                      collected: currentUser.collected.includes(m.id),
+                      'is-pending': isPendingHarvest(m.id),
+                      'is-locked': !isMushroomObtainable(m),
+                    }"
+                  @click="markHandbookCollected(m.id)"
                 >
                   <div class="target-img-box order-result-img">
                     <img
@@ -4971,6 +5187,7 @@
           id: "ny-1xj8mwe",
           category: "猴头菌",
           name: "微小宅宅猴头菌",
+          branch: "绝世名琴",
           lamp: "火炬",
           waterer: "小鸟长颈壶",
           time: "白天",
@@ -5880,9 +6097,9 @@
           isFailed: false,
         },
         {
-          id: "ny-19meear",
+          id: "ny-r3iol9",
           category: "幽灵菌",
-          name: "大号一口见阿祖幽灵菌",
+          name: "小号一口见阿祖幽灵菌",
           branch: "绣衣书案",
           lamp: "魂魂烛台",
           waterer: "莲蓬花洒",
@@ -5891,9 +6108,9 @@
           isFailed: false,
         },
         {
-          id: "ny-r3iol9",
+          id: "ny-19meear",
           category: "幽灵菌",
-          name: "小号一口见阿祖幽灵菌",
+          name: "大号一口见阿祖幽灵菌",
           branch: "绣衣书案",
           lamp: "魂魂烛台",
           waterer: "莲蓬花洒",
@@ -6420,7 +6637,7 @@
         芝: "zhi",
         花: "hua",
         苍: "cang",
-        茄: "jia",
+        茄: "qie",
         草: "cao",
         荧: "ying",
         荪: "sun",
@@ -6835,6 +7052,45 @@
         "微型蔫蔫鹿角菌",
         "巨体蔫蔫鹿角菌",
       ]);
+      const EQUIPMENT_RARITY_CLASS = {
+        branch: new Map([
+          ["柏木", "rarity-common"],
+          ["枫木", "rarity-common"],
+          ["松木", "rarity-common"],
+          ["牵牛藤木", "rarity-common"],
+          ["常春藤木", "rarity-common"],
+          ["牵牛藤木", "rarity-common"],
+          ["爱心鳞木", "rarity-rare"],
+          ["葛藤木", "rarity-rare"],
+          ["炎溶岩木", "rarity-rare"],
+          ["青金矿木", "rarity-rare"],
+          ["尖刺棘木", "rarity-rare"],
+          ["尖晶矿木", "rarity-legend"],
+          ["绿松矿木", "rarity-legend"],
+          ["绣衣书案", "rarity-legend"],
+          ["绝世名琴", "rarity-legend"],
+          ["黄金建木", "rarity-legend"],
+        ]),
+        lamp: new Map([
+          ["火炬", "rarity-common"],
+          ["魂魂烛台", "rarity-common"],
+          ["铜盏油灯", "rarity-common"],
+          ["羽绒无烟灯", "rarity-rare"],
+          ["白龙长明灯", "rarity-legend"],
+        ]),
+        waterer: new Map([
+          ["竹筒滴漏", "rarity-common"],
+          ["莲蓬花洒", "rarity-common"],
+          ["陶滴壶", "rarity-common"],
+          ["小鸟长颈壶", "rarity-rare"],
+          ["深蓝之谜", "rarity-legend"],
+        ]),
+      };
+      const IMMORTAL_TAG_COLORS = {
+        1: "#d4af37",
+        2: "#d9782d",
+        3: "#d44747",
+      };
 
       const CSV_PATH = "./assets/nanyang.csv";
 
@@ -7070,7 +7326,12 @@
               return [...(currentUser.value.orderHistory || [])].reverse();
             });
             const orderPresets = ["刘辩", "傅融", "左慈", "袁基", "孙策"];
-            const orderDraft = reactive({ id: "", name: "", items: [] });
+            const orderDraft = reactive({
+              id: "",
+              name: "",
+              reward: 0,
+              items: [],
+            });
             const orderFormVisible = ref(false);
             const storedOrderListCollapsed = localStorage.getItem(
               "mushroom_order_list_collapsed"
@@ -7120,6 +7381,12 @@
             let panelNoticeTimer = null;
             const focusOrderId = ref("");
             let focusTimer = null;
+            const orderHoverTip = reactive({
+              visible: false,
+              x: 0,
+              y: 0,
+              lines: [],
+            });
 
             const scrollToElement = (targetRef) => {
               if (!targetRef || !targetRef.value) return;
@@ -7158,6 +7425,170 @@
                 list.push(...rec.orderMatches);
               }
               return list.some((item) => isLongTimeMushroom(item.name));
+            };
+            const getRarityClass = (type, value) => {
+              const map = EQUIPMENT_RARITY_CLASS[type];
+              if (!map) return "";
+              const key = String(value || "").trim();
+              if (!key || key === "/") return "";
+              return map.get(key) || "";
+            };
+            const getLegendaryCount = (value) => {
+              const resolvedId = normalizeMushroomId(value);
+              const mushroom = idToMushroom.get(resolvedId);
+              if (!mushroom) return 0;
+              let count = 0;
+              if (getRarityClass("branch", mushroom.branch) === "rarity-legend")
+                count += 1;
+              if (getRarityClass("lamp", mushroom.lamp) === "rarity-legend")
+                count += 1;
+              if (
+                getRarityClass("waterer", mushroom.waterer) === "rarity-legend"
+              )
+                count += 1;
+              return count;
+            };
+            const getImmortalTagStyle = (value) => {
+              const count = getLegendaryCount(value);
+              if (!count) return null;
+              if (count === 2) {
+                const base = IMMORTAL_TAG_COLORS[1] || "#d4af37";
+                return {
+                  background: base,
+                  boxShadow: "inset 0 0 0 2px #FFD46A",
+                };
+              }
+              const color =
+                IMMORTAL_TAG_COLORS[count] || IMMORTAL_TAG_COLORS[3];
+              return { background: color };
+            };
+            const getComplexityMeta = (value) => {
+              const resolvedId = normalizeMushroomId(value);
+              const mushroom = idToMushroom.get(resolvedId);
+              if (!mushroom) return { label: "", className: "" };
+              const name = (mushroom.name || "").trim();
+              if (isLongTimeMushroom(name)) {
+                return { label: "牢", className: "tag-jail" };
+              }
+              const hasLamp =
+                mushroom.lamp && String(mushroom.lamp).trim() !== "/";
+              const hasWaterer =
+                mushroom.waterer && String(mushroom.waterer).trim() !== "/";
+              const hasCondition =
+                mushroom.condition && String(mushroom.condition).trim() !== "/";
+              const complexity =
+                (hasLamp ? 1 : 0) +
+                (hasWaterer ? 1 : 0) +
+                (hasCondition ? 1 : 0);
+              let label = "易";
+              if (hasCondition && complexity < 2) {
+                label = "普";
+              } else if (complexity >= 3) {
+                label = "难";
+              } else if (complexity >= 2) {
+                label = "普";
+              }
+              const className =
+                label === "易"
+                  ? "tag-easy"
+                  : label === "普"
+                  ? "tag-normal"
+                  : "tag-hard";
+              return { label, className };
+            };
+            const getComplexityLabel = (value) => {
+              return getComplexityMeta(value).label;
+            };
+            const getComplexityClass = (value) => {
+              return getComplexityMeta(value).className;
+            };
+            const TOOLTIP_RARITY_CLASS = {
+              "rarity-common": "tooltip-rarity-common",
+              "rarity-rare": "tooltip-rarity-rare",
+              "rarity-legend": "tooltip-rarity-legend",
+            };
+            const getTooltipRarityClass = (type, value) => {
+              const baseClass = getRarityClass(type, value);
+              return TOOLTIP_RARITY_CLASS[baseClass] || "";
+            };
+            const getTooltipConditionClass = (value) => {
+              const text = String(value || "");
+              if (text.includes("滋补汤")) return "tooltip-condition-soup";
+              if (text.includes("消食片")) return "tooltip-condition-tablet";
+              return "";
+            };
+            const orderTargetInfoCache = new Map();
+            const formatRouteValue = (value, fallback) => {
+              if (value === undefined || value === null) return fallback;
+              const trimmed = String(value).trim();
+              if (!trimmed || trimmed === "/") return fallback;
+              return trimmed;
+            };
+            const getOrderTargetInfoLines = (value) => {
+              const resolvedId = normalizeMushroomId(value);
+              if (orderTargetInfoCache.has(resolvedId)) {
+                return orderTargetInfoCache.get(resolvedId);
+              }
+              const mushroom = idToMushroom.get(resolvedId);
+              if (!mushroom) {
+                orderTargetInfoCache.set(resolvedId, []);
+                return [];
+              }
+              const lines = [
+                {
+                  label: "木:",
+                  value: formatRouteValue(mushroom.branch, "无/任意"),
+                  className: getTooltipRarityClass("branch", mushroom.branch),
+                },
+                {
+                  label: "灯:",
+                  value: formatRouteValue(mushroom.lamp, "无/任意"),
+                  className: getTooltipRarityClass("lamp", mushroom.lamp),
+                },
+                {
+                  label: "水:",
+                  value: formatRouteValue(mushroom.waterer, "无/任意"),
+                  className: getTooltipRarityClass("waterer", mushroom.waterer),
+                },
+                {
+                  label: "道具:",
+                  value: formatRouteValue(mushroom.condition, "不需道具"),
+                  className: getTooltipConditionClass(mushroom.condition),
+                },
+                {
+                  label: "时段:",
+                  value: formatRouteValue(mushroom.time, "全时段"),
+                  className: "",
+                },
+                {
+                  label: "需检查时间:",
+                  value: isLongTimeMushroom(mushroom.name) ? "是" : "否",
+                  className: "",
+                },
+              ];
+              orderTargetInfoCache.set(resolvedId, lines);
+              return lines;
+            };
+            const updateOrderHoverTipPosition = (event) => {
+              if (!event) return;
+              const offsetX = 12;
+              const offsetY = 12;
+              orderHoverTip.x = event.clientX + offsetX;
+              orderHoverTip.y = event.clientY + offsetY;
+            };
+            const showOrderHoverTip = (id, event) => {
+              const lines = getOrderTargetInfoLines(id);
+              if (!lines.length) return;
+              orderHoverTip.lines = lines;
+              orderHoverTip.visible = true;
+              updateOrderHoverTipPosition(event);
+            };
+            const moveOrderHoverTip = (event) => {
+              if (!orderHoverTip.visible) return;
+              updateOrderHoverTipPosition(event);
+            };
+            const hideOrderHoverTip = () => {
+              orderHoverTip.visible = false;
             };
 
             const idToMushroom = new Map(database.map((m) => [m.id, m]));
@@ -7322,6 +7753,11 @@
               if (trimmed.includes("订单")) return trimmed;
               return `${trimmed}的订单`;
             };
+            const getOrderReward = (order) => {
+              if (!order) return 0;
+              const value = parseInt(order.reward, 10);
+              return Number.isFinite(value) && value >= 0 ? value : 0;
+            };
 
             const specialOrderOwners = new Set([
               "傅融",
@@ -7388,6 +7824,7 @@
               const record = {
                 id: generateOrderId(),
                 name: "",
+                reward: 0,
                 action: "increment",
                 source: source || "",
                 items: [{ id: resolvedId, required: 1 }],
@@ -7637,6 +8074,7 @@
               const excludeIds = options.excludeIds || new Set();
               const filterFn = options.filterFn;
               const includeFailed = options.includeFailed === true;
+              const moveFailedToEnd = options.moveFailedToEnd === true;
               const source = includeFailed
                 ? database
                 : database.filter((m) => !m.isFailed);
@@ -7728,7 +8166,23 @@
                   });
                   ordered.push(...sorted);
                 });
-                groups.push({ category, items: ordered });
+                const isFailedItem = (item) =>
+                  item.isFailed ||
+                  (item.name || "").trim().startsWith("未能长大的");
+                if (moveFailedToEnd) {
+                  const normalItems = [];
+                  const failedItems = [];
+                  ordered.forEach((item) => {
+                    if (isFailedItem(item)) failedItems.push(item);
+                    else normalItems.push(item);
+                  });
+                  groups.push({
+                    category,
+                    items: [...normalItems, ...failedItems],
+                  });
+                } else {
+                  groups.push({ category, items: ordered });
+                }
               });
               return groups;
             };
@@ -7746,6 +8200,7 @@
               return buildCategoryGroups({
                 filterFn,
                 includeFailed: true,
+                moveFailedToEnd: true,
               });
             });
             const orderActiveCategory = computed(() => {
@@ -7770,9 +8225,8 @@
             const setHandbookPickerCategory = (category) => {
               handbookPickerCategory.value = category;
             };
-            const applyHandbookSearch = (name) => {
-              searchQuery.value = name || "";
-              handbookPickerVisible.value = false;
+            const markHandbookCollected = (id) => {
+              toggleCollected(id);
             };
 
             const setOrderPreset = (preset) => {
@@ -7809,6 +8263,7 @@
             const resetOrderDraft = () => {
               orderDraft.id = "";
               orderDraft.name = "";
+              orderDraft.reward = 0;
               orderDraft.items = [];
               orderQuery.value = "";
               orderPickerVisible.value = false;
@@ -7831,6 +8286,7 @@
 
             const saveOrder = () => {
               const normalizedName = (orderDraft.name || "").trim();
+              const reward = Math.max(0, parseInt(orderDraft.reward, 10) || 0);
               const uniqueItems = [];
               const seen = new Set();
               orderDraft.items.forEach((item) => {
@@ -7849,6 +8305,7 @@
               const payload = {
                 id: orderDraft.id || generateOrderId(),
                 name: normalizedName,
+                reward,
                 items: uniqueItems,
               };
 
@@ -7869,6 +8326,7 @@
               if (!order) return;
               orderDraft.id = order.id;
               orderDraft.name = order.name || "";
+              orderDraft.reward = Math.max(0, parseInt(order.reward, 10) || 0);
               const items = (order.items || []).map((item) => ({
                 id: normalizeMushroomId(item.id),
                 required: Math.max(1, parseInt(item.required, 10) || 1),
@@ -7974,6 +8432,7 @@
               return {
                 id: order.id || generateOrderId(),
                 name: order.name || "",
+                reward: getOrderReward(order),
                 action,
                 items: (order.items || []).map((item) => ({
                   id: normalizeMushroomId(item.id),
@@ -8012,6 +8471,7 @@
               if (action === "increment") {
                 return "库存 +1";
               }
+              const reward = Math.max(0, parseInt(record.reward, 10) || 0);
               const actionLabel = action === "delete" ? "删除" : "交付";
               const detail = record.items
                 .map((item) => {
@@ -8023,7 +8483,7 @@
                   return `${name} x${required}`;
                 })
                 .join(" / ");
-              return `${actionLabel}: ${detail}`;
+              return `${actionLabel}: ${detail} | 报酬 ${reward}`;
             };
 
             const getOrderRecordTitle = (record) => {
@@ -8407,6 +8867,7 @@
                     if (!order) return null;
                     const id = order.id || generateOrderId();
                     const name = order.name || "";
+                    const reward = Math.max(0, parseInt(order.reward, 10) || 0);
                     const items = normalizeOrderItems(order.items || []);
                     if (items.length === 0) return null;
                     items.forEach((item) => {
@@ -8416,11 +8877,12 @@
                     });
                     if (
                       id !== order.id ||
-                      items.length !== (order.items || []).length
+                      items.length !== (order.items || []).length ||
+                      reward !== (parseInt(order.reward, 10) || 0)
                     ) {
                       hasChanges = true;
                     }
-                    return { id, name, items };
+                    return { id, name, reward, items };
                   })
                   .filter(Boolean);
 
@@ -8429,6 +8891,7 @@
                   const items = normalizeOrderItems(record.items || []);
                   const id = record.id || generateOrderId();
                   const name = record.name || "";
+                  const reward = Math.max(0, parseInt(record.reward, 10) || 0);
                   const timestamp = record.timestamp || Date.now();
                   const action = record.action || "deliver";
                   const source = record.source || "";
@@ -8436,13 +8899,14 @@
                     id !== record.id ||
                     name !== record.name ||
                     items.length !== (record.items || []).length ||
+                    reward !== (parseInt(record.reward, 10) || 0) ||
                     timestamp !== record.timestamp ||
                     action !== record.action ||
                     source !== record.source
                   ) {
                     hasChanges = true;
                   }
-                  return { id, name, items, timestamp, action, source };
+                  return { id, name, reward, items, timestamp, action, source };
                 });
 
                 user.history = user.history.map((log) => {
@@ -9315,6 +9779,7 @@
               orderDraft,
               orderFormVisible,
               orderListCollapsed,
+              orderHoverTip,
               toggleOrderListCollapse,
               orderPanelRef,
               recListTop,
@@ -9327,7 +9792,7 @@
               handbookCategoryGroups,
               handbookActiveCategory,
               setHandbookPickerCategory,
-              applyHandbookSearch,
+              markHandbookCollected,
               startNewOrder,
               setOrderPreset,
               addOrderItem,
@@ -9342,6 +9807,7 @@
               getOrderItem,
               getOrderItemName,
               formatOrderName,
+              getOrderReward,
               isThreeColumnOrder,
               isEditingOrder,
               saveOrder,
@@ -9365,6 +9831,15 @@
               focusOrderCard,
               isLongTimeMushroom,
               hasLongTimeInPlan,
+              getRarityClass,
+              getLegendaryCount,
+              getImmortalTagStyle,
+              getComplexityLabel,
+              getComplexityClass,
+              getOrderTargetInfoLines,
+              showOrderHoverTip,
+              moveOrderHoverTip,
+              hideOrderHoverTip,
               users,
               currentUserIndex,
               currentUser,
