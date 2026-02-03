@@ -9137,7 +9137,17 @@
           }
         },
         {
-          "name": "右（未实装）"
+          "name": "右（未实装）",
+          "pipeline_override": {
+            "南阳-选择目的地": {
+              "enabled": true,
+              "action": {
+                "param": {
+                  "target": [542, 811, 60, 40]
+                }
+              }
+            }
+          }
         }
       ]
     },
