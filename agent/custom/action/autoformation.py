@@ -314,7 +314,9 @@ class AutoFormation(CustomAction):
             opers = data.get("opers", [])
             for oper in opers:
                 operator = self._operators.get(oper.get("name"))
-                oper["discs_ot_names"] = self._map_discs(oper, operator)
+                required, forbidden = self._map_discs(oper, operator)
+                oper["discs_ot_names"] = required
+                oper["discs_ot_forbidden"] = forbidden
                 oper["prof"] = oper.get("prof") or (
                     operator.get("prof") if operator else None
                 )
@@ -328,17 +330,20 @@ class AutoFormation(CustomAction):
             logger.exception(f"加载 copilot 缓存失败: {cache_file}")
             return None
 
-    def _map_discs(self, oper: Dict, operator: Optional[dict] = None) -> List[str]:
+    def _map_discs(
+        self, oper: Dict, operator: Optional[dict] = None
+    ) -> Tuple[List[str], List[str]]:
         indexes = oper.get("discs_selected") or []
         if not indexes:
-            return []
+            return [], []
         if operator is None:
             operator = self._operators.get(oper.get("name"))
         if not operator:
             logger.warning(f"operators.json 中未找到密探: {oper.get('name')}")
-            return []
+            return [], []
         discs = operator.get("discs", [])
-        result = []
+        required: List[str] = []
+        forbidden: List[str] = []
         for idx in indexes:
             try:
                 idx_int = int(idx)
@@ -347,7 +352,17 @@ class AutoFormation(CustomAction):
                 continue
 
             if idx_int <= 0:
-                # 0 或负数代表空槽，跳过
+                if idx_int == 0:
+                    # 0 代表空槽
+                    continue
+                real_idx = abs(idx_int) - 1
+                if real_idx < 0 or real_idx >= len(discs):
+                    logger.warning(f"命盘索引越界 {idx_int} 对应 {oper.get('name')}")
+                    continue
+                disc = discs[real_idx]
+                name = disc.get("ot_name") or ""
+                if name:
+                    forbidden.append(self._convert(name))
                 continue
 
             real_idx = idx_int - 1  # copilot 序号从 1 开始
@@ -358,8 +373,20 @@ class AutoFormation(CustomAction):
             disc = discs[real_idx]
             name = disc.get("ot_name") or ""
             if name:
-                result.append(self._convert(name))
-        return result
+                required.append(self._convert(name))
+
+        # 去重保持顺序
+        def _uniq(items: List[str]) -> List[str]:
+            seen = set()
+            out = []
+            for item in items:
+                if item in seen:
+                    continue
+                seen.add(item)
+                out.append(item)
+            return out
+
+        return _uniq(required), _uniq(forbidden)
 
     # ---------------- OCR/动作辅助 ----------------
     def _screenshot(self, context: Context):
@@ -731,6 +758,23 @@ class DiscChecker(CustomAction):
                 missing.append(need)
         return missing
 
+    def _find_forbidden(self, forbidden: List[str], effects: List[str]) -> List[str]:
+        hits: List[str] = []
+        for ban in forbidden:
+            best_score = 0.0
+            best_effect = ""
+            for effect in effects:
+                score = self._similarity(ban, effect)
+                if score > best_score:
+                    best_score = score
+                    best_effect = effect
+            # logger.info(
+            #     f"禁用命盘匹配: ban={ban}, best_effect={best_effect}, score={best_score:.3f}, effects={effects}"
+            # )
+            if best_score >= self.DEFAULT_THRESHOLD:
+                hits.append(ban)
+        return hits
+
     def _similarity(self, need: str, effect: str) -> float:
         """计算命盘描述相似度，若数字部分不同则视为强不匹配。"""
         need_nums = _extract_numbers(need)
@@ -820,12 +864,16 @@ class DiscChecker(CustomAction):
         opers: List[Dict] = plan.get("opers", []) or []
         opers_num = plan.get("opers_num", len(opers))
 
-        has_any_discs = any((oper.get("discs_ot_names") for oper in opers))
+        has_any_discs = any(
+            (oper.get("discs_ot_names") or oper.get("discs_ot_forbidden"))
+            for oper in opers
+        )
         if not has_any_discs:
             logger.info("方案未配置命盘要求，跳过命盘检测")
             return CustomAction.RunResult(success=True)
 
         overall_success = True
+        violations_summary: List[str] = []
 
         for idx in range(opers_num):
             if _should_stop_ctx(context):
@@ -834,22 +882,31 @@ class DiscChecker(CustomAction):
             oper = opers[idx] if idx < len(opers) else None
             oper_name = oper.get("name") if oper else ""
             required = []
+            forbidden = []
             if oper:
                 required = [
                     self._convert(str(name))
                     for name in (oper.get("discs_ot_names") or [])
                     if name
                 ]
+                forbidden = [
+                    self._convert(str(name))
+                    for name in (oper.get("discs_ot_forbidden") or [])
+                    if name
+                ]
 
-            if not required:
+            if not required and not forbidden:
                 logger.info(f"{idx + 1}号位({oper_name})未配置命盘要求，跳过")
             else:
                 effects_before = self._read_active_effects(context)
                 missing_before = self._find_missing(required, effects_before)
+                forbidden_before = self._find_forbidden(forbidden, effects_before)
+                violations_before = len(missing_before) + len(forbidden_before)
 
-                if missing_before:
+                if missing_before or forbidden_before:
                     logger.info(
-                        f"{idx + 1}号位({oper_name})缺少命盘: {missing_before}，尝试切换命盘"
+                        f"{idx + 1}号位({oper_name})缺少命盘: {missing_before}，"
+                        f"禁止命盘: {forbidden_before}，尝试切换命盘"
                     )
                     self._run_task(context, self.RETRY_TASK, wait_ms=self.RETRY_WAIT_MS)
                     close_hit = self._run_task(
@@ -861,23 +918,28 @@ class DiscChecker(CustomAction):
 
                     effects_after = effects_before
                     missing_after = missing_before
+                    forbidden_after = forbidden_before
+                    violations_after = violations_before
                     if close_hit:
                         logger.info("检测到仅一组命盘，保持当前侧效果")
                     else:
                         effects_after = self._read_active_effects(context)
                         missing_after = self._find_missing(required, effects_after)
+                        forbidden_after = self._find_forbidden(forbidden, effects_after)
+                        violations_after = len(missing_after) + len(forbidden_after)
 
-                    if not missing_after:
+                    if not missing_after and not forbidden_after:
                         logger.info(
                             f"{idx + 1}号位({oper_name})切换后命盘已符合作业要求"
                         )
                         effects_final = effects_after
                         missing_final: List[str] = []
+                        forbidden_final: List[str] = []
                     else:
                         # 仅在切换成功且缺失更差时回退
-                        if (not close_hit) and len(missing_after) > len(missing_before):
+                        if (not close_hit) and violations_after > violations_before:
                             logger.info(
-                                f"切换后缺失更多({len(missing_after)}>{len(missing_before)}), 再切回原侧"
+                                f"切换后违规更多({violations_after}>{violations_before}), 再切回原侧"
                             )
                             self._run_task(
                                 context, self.RETRY_TASK, wait_ms=self.RETRY_WAIT_MS
@@ -890,21 +952,45 @@ class DiscChecker(CustomAction):
                             )
                             effects_final = effects_before
                             missing_final = missing_before
+                            forbidden_final = forbidden_before
                         else:
                             effects_final = effects_after
                             missing_final = missing_after
+                            forbidden_final = forbidden_after
 
-                        if missing_final:
+                        if missing_final or forbidden_final:
                             overall_success = False
                             logger.info(
                                 f"{idx + 1}号位({oper_name})最终停留侧的效果: {effects_final}, 缺失: {missing_final}"
                             )
+                            if forbidden_final:
+                                logger.info(
+                                    f"{idx + 1}号位({oper_name})最终禁用命盘: {forbidden_final}"
+                                )
                             for name in missing_final:
                                 logger.error(f"{oper_name}缺少命盘: {name}")
+                            for name in forbidden_final:
+                                logger.error(f"{oper_name}出现禁用命盘: {name}")
+                            parts: List[str] = []
+                            if missing_final:
+                                parts.append(f"缺少{','.join(missing_final)}命盘")
+                            if forbidden_final:
+                                parts.append(
+                                    f"出现禁用命盘:{','.join(forbidden_final)}"
+                                )
+                            if parts:
+                                violations_summary.append(
+                                    f"{idx + 1}号位({oper_name}):" + "/".join(parts)
+                                )
                 else:
                     logger.info(f"{idx + 1}号位({oper_name})命盘已符合作业要求")
 
             if idx < opers_num - 1:
                 self._run_task(context, self.NEXT_TASK, wait_ms=1000)
+
+        if not overall_success and violations_summary:
+            logger.error("存在不符合作业要求的命盘，汇总如下：")
+            for line in violations_summary:
+                logger.error(line)
 
         return CustomAction.RunResult(success=overall_success)
