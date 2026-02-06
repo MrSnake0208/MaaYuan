@@ -3974,6 +3974,18 @@
               }
             }
           }
+        },
+        {
+          "name": "蚕茧、蚕丝加成",
+          "pipeline_override": {
+            "心纸营建历险-选择指定密探": {
+              "recognition": {
+                "param": {
+                  "template": "agent/yingjian/chendeng.png"
+                }
+              }
+            }
+          }
         }
       ]
     },
@@ -4336,6 +4348,18 @@
               "recognition": {
                 "param": {
                   "expected": "砂"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "蚕丝",
+          "pipeline_override": {
+            "心纸工坊-选择材料": {
+              "recognition": {
+                "param": {
+                  "expected": "蚕"
                 }
               }
             }
