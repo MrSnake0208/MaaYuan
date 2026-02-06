@@ -1,49 +1,74 @@
 {
-    "录制_吕布切换形态": {
-        "recognition": {
-            "type": "TemplateMatch",
-            "param": {
-                "template": [
-                    "copilot/lb_l2h.png",
-                    "copilot/lb_h2l.png"
-                ],
-                "roi": [
-                    15,
-                    1072,
-                    690,
-                    95
-                ],
-                "threshold": 0.8
-            }
-        },
-        "action": {
-            "type": "Click",
-            "param": {}
-        },
-        "focus": "点击吕布-切换形态",
-        "text_doc": "吕布"
+  "录制_吕布切换形态": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": ["copilot/lb_l2h.png", "copilot/lb_h2l.png"],
+        "roi": [15, 1072, 690, 95],
+        "threshold": 0.8
+      }
     },
-    "录制_史子眇sp技能": {
-        "recognition": {
-            "type": "TemplateMatch",
-            "param": {
-                "template": [
-                    "copilot/szm_sp_skill.png"
-                ],
-                "roi": [
-                    15,
-                    1072,
-                    690,
-                    95
-                ],
-                "threshold": 0.8
-            }
-        },
-        "action": {
-            "type": "Click",
-            "param": {}
-        },
-        "focus": "点击史子眇sp技能",
-        "text_doc": "史子眇sp"
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "focus": "点击吕布-切换形态",
+    "text_doc": "吕布"
+  },
+  "录制_史子眇sp技能": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": ["copilot/szm_sp_skill.png"],
+        "roi": [15, 1072, 690, 95],
+        "threshold": 0.8
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "focus": "点击史子眇sp技能",
+    "text_doc": "史子眇sp"
+  },
+  "录制_1号位SP": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [76, 1114, 17, 18]
+      }
     }
+  },
+  "录制_2号位SP": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [214, 1116, 23, 13]
+      }
+    }
+  },
+  "录制_3号位SP": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [355, 1118, 17, 10]
+      }
+    }
+  },
+  "录制_4号位SP": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [498, 1115, 13, 16]
+      }
+    }
+  },
+  "录制_5号位SP": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [634, 1118, 16, 11]
+      }
+    }
+  }
 }
