@@ -47,9 +47,9 @@ jobs:
             tag="$prefix-ci.$suffix"
           fi
           is_prerelease=false
-          # if [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-([Aa]lpha|[Bb]eta)\.[0-9]+$ ]]; then
-          #   is_prerelease=true
-          # fi
+          if [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-([Aa]lpha)\.[0-9]+$ ]]; then
+            is_prerelease=true
+          fi
 
           echo tag=$tag | tee -a $GITHUB_OUTPUT
           echo is_release=$is_release | tee -a $GITHUB_OUTPUT
