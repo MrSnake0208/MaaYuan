@@ -6,6 +6,153 @@
     <title>MaaYuan 导航站</title>
     <link rel="icon" href="assets/logo.png" type="image/png" />
     <style>
+      /* 顶部公告条 */
+      .announcement-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, #d78935 0%, #c7782f 100%);
+        color: #fff;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      }
+
+      .announcement-content {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      .announcement-icon {
+        font-size: 16px;
+      }
+
+      .announcement-text {
+        font-weight: 500;
+      }
+
+      .announcement-link {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        cursor: pointer;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 13px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+      }
+
+      .announcement-link:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+
+      /* 公告详情弹窗样式 */
+      .announcement-detail-panel {
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      .announcement-detail-panel::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .announcement-detail-panel::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+      }
+
+      .announcement-detail-panel::-webkit-scrollbar-thumb {
+        background: #c7b299;
+        border-radius: 4px;
+      }
+
+      .announcement-detail-panel::-webkit-scrollbar-thumb:hover {
+        background: #a8957a;
+      }
+
+      /* 公告详情弹窗内容样式 */
+      .announcement-detail-content {
+        text-align: left;
+        font-size: 14px;
+        line-height: 1.8;
+        color: #2a251a;
+      }
+
+      .announcement-detail-content p {
+        margin: 12px 0;
+      }
+
+      .announcement-detail-content ul {
+        margin: 12px 0;
+        padding-left: 24px;
+      }
+
+      .announcement-detail-content li {
+        margin: 6px 0;
+      }
+
+      .announcement-detail-content a {
+        color: #d78935;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .announcement-detail-content a:hover {
+        text-decoration: underline;
+      }
+
+      /* 有公告条时，给 body 添加上边距 */
+      body.has-announcement {
+        padding-top: 50px;
+      }
+
+      /* 移动端公告条优化 */
+      @media (max-width: 768px) {
+        .announcement-bar {
+          padding: 10px 15px;
+        }
+
+        .announcement-content {
+          font-size: 13px;
+          gap: 6px;
+        }
+
+        .announcement-icon {
+          font-size: 14px;
+        }
+
+        .announcement-link {
+          font-size: 12px;
+          padding: 3px 10px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .announcement-content {
+          gap: 4px;
+          text-align: center;
+        }
+
+        .announcement-bar {
+          padding: 8px 12px;
+        }
+
+        .announcement-text {
+          font-size: 12px;
+        }
+      }
+
       body {
         margin: 0;
         padding: 0;
@@ -239,9 +386,9 @@
         position: fixed;
         inset: 0;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
-        padding: 20px;
+        padding: 60px 20px 20px;
         background-color: rgba(0, 0, 0, 0.3);
         opacity: 0;
         visibility: hidden;
@@ -263,6 +410,10 @@
         width: 100%;
         box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
         position: relative;
+      }
+
+      .announcement-detail-panel {
+        max-width: 520px;
       }
 
       .mirror-panel h4 {
@@ -576,6 +727,15 @@
     </style>
   </head>
   <body>
+    <!-- 顶部公告条 -->
+    <div class="announcement-bar" id="announcementBar">
+      <div class="announcement-content">
+        <span class="announcement-icon">📢</span>
+        <span class="announcement-text">MaaYuan 内测玩家招募公告</span>
+        <button class="announcement-link" id="announcementDetailBtn">查看详情</button>
+      </div>
+    </div>
+
     <!-- 预加载所有可能用到的图片 -->
     <div class="preload-container">
       <img src="assets/cat.png" alt="猫图预加载" />
@@ -674,8 +834,8 @@
             </span>
           </h3>
           <div class="download-links">
-            <a href="https://start.maayuan.top" target="_blank">新手必看</a>
-            <a href="https://doc.maayuan.top" target="_blank">使用文档</a>
+            <a href="https://docs.qq.com/aio/DS1BMQmpiQkdOb1RT?isOfflineNewFileFlag=&p=dxvbe5QXPlSJEtTVhtMKgB" target="_blank">新手教学</a>
+            <a href="https://doc.maayuan.top" target="_blank">使用手册</a>
             <a
               href="#cn-mirror"
               class="mirror-trigger"
@@ -698,8 +858,13 @@
           </p>
           <h3>🔗 其他实用链接</h3>
           <div class="download-links">
-            <a href="https://pd.qq.com/s/7blnnchll" target="_blank"
-              >交流反馈频道</a
+            <a
+              href="#contact"
+              class="contact-trigger"
+              role="button"
+              aria-controls="contactPanel"
+              aria-expanded="false"
+              >一键找到我</a
             >
             <a href="https://share.maayuan.top/" target="_blank"
               >全新战斗作业站</a
@@ -770,9 +935,190 @@
       </div>
     </div>
 
+    <!-- 一键找到我弹窗 -->
+    <div
+      class="mirror-panel-backdrop"
+      id="contactBackdrop"
+      hidden
+      aria-hidden="true"
+    >
+      <div
+        class="mirror-panel contact-panel"
+        id="contactPanel"
+        role="dialog"
+        aria-labelledby="contactTitle"
+        tabindex="-1"
+      >
+        <button
+          type="button"
+          class="mirror-close contact-close"
+          aria-label="关闭联系面板"
+        >
+          ×
+        </button>
+        <h4 id="contactTitle">一键找到我</h4>
+        <p class="mirror-description">选择你想使用的平台：</p>
+        <div class="mirror-links contact-links">
+          <a
+            href="https://xhslink.com/m/43oBa9BXMD4"
+            target="_blank"
+            rel="noopener"
+            >小红书</a
+          >
+          <a
+            href="https://space.bilibili.com/3690998968355771"
+            target="_blank"
+            rel="noopener"
+            >B站</a
+          >
+          <a
+            href="https://qm.qq.com/q/ORc2ANqg24"
+            target="_blank"
+            rel="noopener"
+            >QQ交流群</a
+          >
+          <a
+            href="https://qm.qq.com/q/nTuF2UJ3EI"
+            target="_blank"
+            rel="noopener"
+            >QQ内测群</a
+          >
+          <a
+            href="https://pd.qq.com/s/4e4angw4z3"
+            target="_blank"
+            rel="noopener"
+            >QQ频道</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- 公告详情弹窗 -->
+    <div
+      class="mirror-panel-backdrop"
+      id="announcementBackdrop"
+      hidden
+      aria-hidden="true"
+    >
+      <div
+        class="mirror-panel announcement-detail-panel"
+        id="announcementDetailPanel"
+        role="dialog"
+        aria-labelledby="announcementDetailTitle"
+        tabindex="-1"
+      >
+        <button
+          type="button"
+          class="mirror-close announcement-detail-close"
+          aria-label="关闭公告详情"
+        >
+          ×
+        </button>
+        <h4 id="announcementDetailTitle">MaaYuan 内测玩家招募公告</h4>
+        <div class="announcement-detail-content">
+          <p>大家好！</p>
+          <p>我们是 MaaYuan（<a href="https://maayuan.top/" target="_blank">https://maayuan.top/</a>）开发团队。目前软件已进入新功能密集迭代阶段，现面向《代号鸢》/《如鸢》玩家公开招募核心内测体验官！如果你满足以下条件，欢迎加入我们：</p>
+          <p>✅ 每天有较充足时间，能高频使用 MaaYuan<br/>
+          ✅ 愿意深度体验新功能，并主动记录使用问题<br/>
+          ✅ 遇到 Bug 或异常时，愿意提供截图/录屏+清晰描述<br/>
+          ✅ 有长期参与反馈的意愿，与项目共同成长</p>
+          <p>✨ <strong>你将获得：</strong></p>
+          <ul>
+            <li>优先体验尚未公开的新功能（如智能作业适配、新版战斗逻辑等）</li>
+            <li>直通开发者的专属反馈通道</li>
+            <li>表现活跃者还将解锁神秘福利：周边盲盒等！</li>
+          </ul>
+          <p>🔒 <strong>关于安全：</strong>MaaYuan 基于图像识别实现，不读取、不修改游戏文件，完全免费开源，合规安全。</p>
+          <p>📥 <strong>如何报名？</strong><br/>
+          请私信我「内测报名」+ 你的常用联系方式（如 QQ / 微信），<br/>
+          或直接加入交流频道：<a href="https://pd.qq.com/s/7blnnchll" target="_blank">https://pd.qq.com/s/7blnnchll</a>（入群请备注"内测"）</p>
+          <p>你的每一次反馈，都是 MaaYuan 变得更好的关键！<br/>
+          期待与你一起，打造最稳、最聪明的鸢系长草助手 💙</p>
+          <p style="text-align: right; color: #666; font-size: 13px; margin-top: 20px;">
+            —— MaaYuan 开发组<br/>
+            2026年2月4日
+          </p>
+        </div>
+      </div>
+    </div>
+
     <script>
       // 页面加载完成后执行
       document.addEventListener("DOMContentLoaded", function () {
+        // 公告条逻辑（始终显示，不可关闭）
+        const announcementBar = document.getElementById("announcementBar");
+        if (announcementBar) {
+          document.body.classList.add("has-announcement");
+        }
+
+        // 公告详情弹窗逻辑
+        const announcementDetailBtn = document.getElementById("announcementDetailBtn");
+        const announcementBackdrop = document.getElementById("announcementBackdrop");
+        const announcementDetailPanel = document.getElementById("announcementDetailPanel");
+        const announcementDetailClose = document.querySelector(".announcement-detail-close");
+
+        const openAnnouncementPanel = () => {
+          if (!announcementDetailBtn || !announcementBackdrop || !announcementDetailPanel) {
+            return;
+          }
+          announcementBackdrop.hidden = false;
+          requestAnimationFrame(() => {
+            announcementBackdrop.classList.add("active");
+            announcementBackdrop.setAttribute("aria-hidden", "false");
+            announcementDetailBtn.setAttribute("aria-expanded", "true");
+            announcementDetailPanel.focus();
+          });
+        };
+
+        const closeAnnouncementPanel = () => {
+          if (!announcementDetailBtn || !announcementBackdrop) {
+            return;
+          }
+          announcementBackdrop.classList.remove("active");
+          announcementBackdrop.setAttribute("aria-hidden", "true");
+          announcementDetailBtn.setAttribute("aria-expanded", "false");
+          setTimeout(() => {
+            if (!announcementBackdrop.classList.contains("active")) {
+              announcementBackdrop.hidden = true;
+            }
+          }, 250);
+        };
+
+        if (announcementDetailBtn && announcementBackdrop && announcementDetailPanel) {
+          announcementDetailBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+            openAnnouncementPanel();
+          });
+          announcementDetailBtn.addEventListener("keydown", function (event) {
+            if (event.key === " " || event.key === "Enter") {
+              event.preventDefault();
+              openAnnouncementPanel();
+            }
+          });
+          if (announcementDetailClose) {
+            announcementDetailClose.addEventListener("click", function (event) {
+              event.preventDefault();
+              closeAnnouncementPanel();
+              announcementDetailBtn.focus();
+            });
+          }
+          announcementBackdrop.addEventListener("click", function (event) {
+            if (event.target === announcementBackdrop) {
+              closeAnnouncementPanel();
+              announcementDetailBtn.focus();
+            }
+          });
+          document.addEventListener("keydown", function (event) {
+            if (
+              event.key === "Escape" &&
+              announcementBackdrop.classList.contains("active")
+            ) {
+              closeAnnouncementPanel();
+              announcementDetailBtn.focus();
+            }
+          });
+        }
+
         const versionBadge = document.querySelector(".version-badge");
         if (versionBadge) {
           const updateExpanded = (expanded) => {
@@ -876,6 +1222,74 @@
             ) {
               closeMirrorPanel();
               mirrorTrigger.focus();
+            }
+          });
+        }
+
+        // 一键找到我弹窗逻辑
+        const contactTrigger = document.querySelector(".contact-trigger");
+        const contactBackdrop = document.getElementById("contactBackdrop");
+        const contactPanel = document.getElementById("contactPanel");
+        const contactCloseButton = document.querySelector(".contact-close");
+
+        const openContactPanel = () => {
+          if (!contactTrigger || !contactBackdrop || !contactPanel) {
+            return;
+          }
+          contactBackdrop.hidden = false;
+          requestAnimationFrame(() => {
+            contactBackdrop.classList.add("active");
+            contactBackdrop.setAttribute("aria-hidden", "false");
+            contactTrigger.setAttribute("aria-expanded", "true");
+            contactPanel.focus();
+          });
+        };
+
+        const closeContactPanel = () => {
+          if (!contactTrigger || !contactBackdrop) {
+            return;
+          }
+          contactBackdrop.classList.remove("active");
+          contactBackdrop.setAttribute("aria-hidden", "true");
+          contactTrigger.setAttribute("aria-expanded", "false");
+          setTimeout(() => {
+            if (!contactBackdrop.classList.contains("active")) {
+              contactBackdrop.hidden = true;
+            }
+          }, 250);
+        };
+
+        if (contactTrigger && contactBackdrop && contactPanel) {
+          contactTrigger.addEventListener("click", function (event) {
+            event.preventDefault();
+            openContactPanel();
+          });
+          contactTrigger.addEventListener("keydown", function (event) {
+            if (event.key === " " || event.key === "Enter") {
+              event.preventDefault();
+              openContactPanel();
+            }
+          });
+          if (contactCloseButton) {
+            contactCloseButton.addEventListener("click", function (event) {
+              event.preventDefault();
+              closeContactPanel();
+              contactTrigger.focus();
+            });
+          }
+          contactBackdrop.addEventListener("click", function (event) {
+            if (event.target === contactBackdrop) {
+              closeContactPanel();
+              contactTrigger.focus();
+            }
+          });
+          document.addEventListener("keydown", function (event) {
+            if (
+              event.key === "Escape" &&
+              contactBackdrop.classList.contains("active")
+            ) {
+              closeContactPanel();
+              contactTrigger.focus();
             }
           });
         }
