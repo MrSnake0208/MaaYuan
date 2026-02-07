@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
@@ -328,7 +328,9 @@
         background-color: rgba(255, 255, 255, 0.4);
         color: inherit;
         cursor: pointer;
-        transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        transition:
+          background-color 0.2s ease,
+          box-shadow 0.2s ease;
         outline: none;
       }
 
@@ -357,7 +359,9 @@
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.2s ease, transform 0.2s ease;
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s ease;
         pointer-events: none;
         text-align: left;
         white-space: normal;
@@ -445,7 +449,9 @@
         color: #493b2c;
         font-weight: 600;
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
       }
 
       .mirror-links a:hover {
@@ -474,7 +480,9 @@
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        transition: background-color 0.2s ease, color 0.2s ease;
+        transition:
+          background-color 0.2s ease,
+          color 0.2s ease;
       }
 
       .mirror-close:hover,
@@ -732,7 +740,9 @@
       <div class="announcement-content">
         <span class="announcement-icon">📢</span>
         <span class="announcement-text">MaaYuan 内测玩家招募公告</span>
-        <button class="announcement-link" id="announcementDetailBtn">查看详情</button>
+        <button class="announcement-link" id="announcementDetailBtn">
+          查看详情
+        </button>
       </div>
     </div>
 
@@ -766,7 +776,7 @@
       <img src="assets/chuanfu.png" alt="船夫图预加载" />
       <img src="assets/fubin.png" alt="府兵图预加载" />
       <img src="assets/heishanjun.png" alt="黑山军图预加载" />
-       <img src="assets/wenchen.png" alt="文臣图预加载" />
+      <img src="assets/wenchen.png" alt="文臣图预加载" />
     </div>
 
     <div class="container">
@@ -834,7 +844,11 @@
             </span>
           </h3>
           <div class="download-links">
-            <a href="https://docs.qq.com/aio/DS1BMQmpiQkdOb1RT?isOfflineNewFileFlag=&p=dxvbe5QXPlSJEtTVhtMKgB" target="_blank">新手教学</a>
+            <a
+              href="https://docs.qq.com/aio/DS1BMQmpiQkdOb1RT?isOfflineNewFileFlag=&p=dxvbe5QXPlSJEtTVhtMKgB"
+              target="_blank"
+              >新手教学</a
+            >
             <a href="https://doc.maayuan.top" target="_blank">使用手册</a>
             <a
               href="#cn-mirror"
@@ -1017,25 +1031,42 @@
         <h4 id="announcementDetailTitle">MaaYuan 内测玩家招募公告</h4>
         <div class="announcement-detail-content">
           <p>大家好！</p>
-          <p>我们是 MaaYuan（<a href="https://maayuan.top/" target="_blank">https://maayuan.top/</a>）开发团队。目前软件已进入新功能密集迭代阶段，现面向《代号鸢》/《如鸢》玩家公开招募核心内测体验官！如果你满足以下条件，欢迎加入我们：</p>
-          <p>✅ 每天有较充足时间，能高频使用 MaaYuan<br/>
-          ✅ 愿意深度体验新功能，并主动记录使用问题<br/>
-          ✅ 遇到 Bug 或异常时，愿意提供截图/录屏+清晰描述<br/>
-          ✅ 有长期参与反馈的意愿，与项目共同成长</p>
+          <p>
+            这里是
+            MaaYuan开发团队。目前软件已进入新功能密集迭代阶段，现面向《代号鸢》/《如鸢》玩家公开招募核心内测体验官！如果你满足以下条件，欢迎加入：
+          </p>
+          <p>
+            ✅ 每天有较充足时间，能高频使用 MaaYuan<br />
+            ✅ 愿意深度体验新功能，并主动记录使用问题<br />
+            ✅ 遇到 Bug 或异常时，愿意提供截图/录屏+清晰描述<br />
+            ✅ 有长期参与反馈的意愿，与项目共同成长
+          </p>
           <p>✨ <strong>你将获得：</strong></p>
           <ul>
             <li>优先体验尚未公开的新功能（如智能作业适配、新版战斗逻辑等）</li>
             <li>直通开发者的专属反馈通道</li>
             <li>表现活跃者还将解锁神秘福利：周边盲盒等！</li>
           </ul>
-          <p>🔒 <strong>关于安全：</strong>MaaYuan 基于图像识别实现，不读取、不修改游戏文件，完全免费开源，合规安全。</p>
-          <p>📥 <strong>如何报名？</strong><br/>
-          请私信我「内测报名」+ 你的常用联系方式（如 QQ / 微信），<br/>
-          或直接加入交流频道：<a href="https://pd.qq.com/s/7blnnchll" target="_blank">https://pd.qq.com/s/7blnnchll</a>（入群请备注"内测"）</p>
-          <p>你的每一次反馈，都是 MaaYuan 变得更好的关键！<br/>
-          期待与你一起，打造最稳、最聪明的鸢系长草助手 💙</p>
-          <p style="text-align: right; color: #666; font-size: 13px; margin-top: 20px;">
-            —— MaaYuan 开发组<br/>
+          <p>
+            📥 <strong>如何报名？</strong><br />
+            如果你可以使用MaaYuan内置更新功能，请直接加入交流群：1080267646<br />
+            并在入群审核中填入以下两个问题的回答：<br />
+            1. 你的电脑系统是W/M/其他<br />
+            2. 你的Maa鸢内置更新类型使用的是G还是M
+          </p>
+          <p>
+            你的每一次反馈，都是 MaaYuan 变得更好的关键！<br />
+            期待与你一起，打造最稳、最聪明的鸢系长草助手 💙
+          </p>
+          <p
+            style="
+              text-align: right;
+              color: #666;
+              font-size: 13px;
+              margin-top: 20px;
+            "
+          >
+            —— MaaYuan 开发组<br />
             2026年2月4日
           </p>
         </div>
@@ -1052,13 +1083,25 @@
         }
 
         // 公告详情弹窗逻辑
-        const announcementDetailBtn = document.getElementById("announcementDetailBtn");
-        const announcementBackdrop = document.getElementById("announcementBackdrop");
-        const announcementDetailPanel = document.getElementById("announcementDetailPanel");
-        const announcementDetailClose = document.querySelector(".announcement-detail-close");
+        const announcementDetailBtn = document.getElementById(
+          "announcementDetailBtn",
+        );
+        const announcementBackdrop = document.getElementById(
+          "announcementBackdrop",
+        );
+        const announcementDetailPanel = document.getElementById(
+          "announcementDetailPanel",
+        );
+        const announcementDetailClose = document.querySelector(
+          ".announcement-detail-close",
+        );
 
         const openAnnouncementPanel = () => {
-          if (!announcementDetailBtn || !announcementBackdrop || !announcementDetailPanel) {
+          if (
+            !announcementDetailBtn ||
+            !announcementBackdrop ||
+            !announcementDetailPanel
+          ) {
             return;
           }
           announcementBackdrop.hidden = false;
@@ -1084,7 +1127,11 @@
           }, 250);
         };
 
-        if (announcementDetailBtn && announcementBackdrop && announcementDetailPanel) {
+        if (
+          announcementDetailBtn &&
+          announcementBackdrop &&
+          announcementDetailPanel
+        ) {
           announcementDetailBtn.addEventListener("click", function (event) {
             event.preventDefault();
             openAnnouncementPanel();
@@ -1124,7 +1171,7 @@
           const updateExpanded = (expanded) => {
             versionBadge.setAttribute(
               "aria-expanded",
-              expanded ? "true" : "false"
+              expanded ? "true" : "false",
             );
           };
           const hidePopover = () => {
@@ -1341,7 +1388,7 @@
                 imageExists(path, (exists) => {
                   resolve({ path: path, exists: exists });
                 });
-              })
+              }),
             );
           });
           return Promise.all(checkPromises);
@@ -1465,7 +1512,7 @@
             preloadContainer.appendChild(img);
           });
           let currentIndex = Math.floor(
-            Math.random() * currentConfig.paths.length
+            Math.random() * currentConfig.paths.length,
           );
           let selectedImage = currentConfig.paths[currentIndex];
           const randomImage = document.getElementById("randomImage");
