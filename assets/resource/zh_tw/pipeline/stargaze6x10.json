@@ -1,0 +1,513 @@
+{
+  "观星-六次观星-循环进行十次": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "收取",
+        "roi": [87, 1155, 205, 75]
+      }
+    },
+    "focus": "启动六次观星收取，循环十次",
+    "next": ["观星-六次循环收取-第1轮"]
+  },
+  "观星-六次循环收取-第1轮": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [477, 831, 71, 96]
+      }
+    },
+    "repeat": 6,
+    "repeat_delay": 1000,
+    "timeout": 100,
+    "post_delay": 1250,
+    "next": ["铜钱不足", "观星-六次循环收取-第1轮收取"]
+  },
+  "观星-六次循环收取-第1轮收取": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "收取",
+        "roi": [87, 1155, 205, 75]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "pre_delay": 500,
+    "timeout": 4000,
+    "next": ["点击获取六次观星奖励1", "星石背包已满"],
+    "on_error": ["stop"]
+  },
+  "点击获取六次观星奖励1": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "green_mask": true,
+        "threshold": 0.6,
+        "roi": [25, 13, 681, 674]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [633, 22, 19, 11]
+      }
+    },
+    "pre_delay": 500,
+    "post_delay": 1000,
+    "next": ["[JumpBack]观星-自动分解提示", "观星-六次循环收取-第2轮"]
+  },
+  "观星-六次循环收取-第2轮": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [477, 831, 71, 96]
+      }
+    },
+    "repeat": 6,
+    "repeat_delay": 1000,
+    "timeout": 100,
+    "post_delay": 1250,
+    "next": ["铜钱不足", "观星-六次循环收取-第2轮收取"]
+  },
+  "观星-六次循环收取-第2轮收取": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "收取",
+        "roi": [87, 1155, 205, 75]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "pre_delay": 500,
+    "timeout": 4000,
+    "next": ["点击获取六次观星奖励2", "星石背包已满"],
+    "on_error": ["stop"]
+  },
+  "点击获取六次观星奖励2": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "green_mask": true,
+        "threshold": 0.6,
+        "roi": [25, 13, 681, 674]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [633, 22, 19, 11]
+      }
+    },
+    "pre_delay": 500,
+    "post_delay": 1000,
+    "next": ["[JumpBack]观星-自动分解提示", "观星-六次循环收取-第3轮"]
+  },
+  "观星-六次循环收取-第3轮": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [477, 831, 71, 96]
+      }
+    },
+    "repeat": 6,
+    "repeat_delay": 1000,
+    "timeout": 100,
+    "post_delay": 1250,
+    "next": ["铜钱不足", "观星-六次循环收取-第3轮收取"]
+  },
+  "观星-六次循环收取-第3轮收取": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "收取",
+        "roi": [87, 1155, 205, 75]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "pre_delay": 500,
+    "timeout": 4000,
+    "next": ["点击获取六次观星奖励3", "星石背包已满"],
+    "on_error": ["stop"]
+  },
+  "点击获取六次观星奖励3": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "green_mask": true,
+        "threshold": 0.6,
+        "roi": [25, 13, 681, 674]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [633, 22, 19, 11]
+      }
+    },
+    "pre_delay": 500,
+    "post_delay": 1000,
+    "next": ["观星-自动分解提示", "观星-六次循环收取-第4轮"]
+  },
+  "观星-六次循环收取-第4轮": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [477, 831, 71, 96]
+      }
+    },
+    "repeat": 6,
+    "repeat_delay": 1000,
+    "timeout": 100,
+    "post_delay": 1250,
+    "next": ["铜钱不足", "观星-六次循环收取-第4轮收取"]
+  },
+  "观星-六次循环收取-第4轮收取": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "收取",
+        "roi": [87, 1155, 205, 75]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "pre_delay": 500,
+    "timeout": 4000,
+    "next": ["点击获取六次观星奖励4", "星石背包已满"],
+    "on_error": ["stop"]
+  },
+  "点击获取六次观星奖励4": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "green_mask": true,
+        "threshold": 0.6,
+        "roi": [25, 13, 681, 674]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [633, 22, 19, 11]
+      }
+    },
+    "pre_delay": 500,
+    "post_delay": 1000,
+    "next": ["观星-自动分解提示", "观星-六次循环收取-第5轮"]
+  },
+  "观星-六次循环收取-第5轮": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [477, 831, 71, 96]
+      }
+    },
+    "repeat": 6,
+    "repeat_delay": 1000,
+    "timeout": 100,
+    "post_delay": 1250,
+    "next": ["铜钱不足", "观星-六次循环收取-第5轮收取"]
+  },
+  "观星-六次循环收取-第5轮收取": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "收取",
+        "roi": [87, 1155, 205, 75]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "pre_delay": 500,
+    "timeout": 4000,
+    "next": ["点击获取六次观星奖励5", "星石背包已满"],
+    "on_error": ["stop"]
+  },
+  "点击获取六次观星奖励5": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "green_mask": true,
+        "threshold": 0.6,
+        "roi": [25, 13, 681, 674]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [633, 22, 19, 11]
+      }
+    },
+    "pre_delay": 500,
+    "post_delay": 1000,
+    "next": ["观星-自动分解提示", "观星-六次循环收取-第6轮"]
+  },
+  "观星-六次循环收取-第6轮": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [477, 831, 71, 96]
+      }
+    },
+    "repeat": 6,
+    "repeat_delay": 1000,
+    "timeout": 100,
+    "post_delay": 1250,
+    "next": ["铜钱不足", "观星-六次循环收取-第6轮收取"]
+  },
+  "观星-六次循环收取-第6轮收取": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "收取",
+        "roi": [87, 1155, 205, 75]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "pre_delay": 500,
+    "timeout": 4000,
+    "next": ["点击获取六次观星奖励6", "星石背包已满"],
+    "on_error": ["stop"]
+  },
+  "点击获取六次观星奖励6": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "green_mask": true,
+        "threshold": 0.6,
+        "roi": [25, 13, 681, 674]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [633, 22, 19, 11]
+      }
+    },
+    "pre_delay": 500,
+    "post_delay": 1000,
+    "next": ["观星-自动分解提示", "观星-六次循环收取-第7轮"]
+  },
+  "观星-六次循环收取-第7轮": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [477, 831, 71, 96]
+      }
+    },
+    "repeat": 6,
+    "repeat_delay": 1000,
+    "timeout": 100,
+    "post_delay": 1250,
+    "next": ["铜钱不足", "观星-六次循环收取-第7轮收取"]
+  },
+  "观星-六次循环收取-第7轮收取": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "收取",
+        "roi": [87, 1155, 205, 75]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "pre_delay": 500,
+    "timeout": 4000,
+    "next": ["点击获取六次观星奖励7", "星石背包已满"],
+    "on_error": ["stop"]
+  },
+  "点击获取六次观星奖励7": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "green_mask": true,
+        "threshold": 0.6,
+        "roi": [25, 13, 681, 674]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [633, 22, 19, 11]
+      }
+    },
+    "pre_delay": 500,
+    "post_delay": 1000,
+    "next": ["观星-自动分解提示", "观星-六次循环收取-第8轮"]
+  },
+  "观星-六次循环收取-第8轮": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [477, 831, 71, 96]
+      }
+    },
+    "repeat": 6,
+    "repeat_delay": 1000,
+    "timeout": 100,
+    "post_delay": 1250,
+    "next": ["铜钱不足", "观星-六次循环收取-第8轮收取"]
+  },
+  "观星-六次循环收取-第8轮收取": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "收取",
+        "roi": [87, 1155, 205, 75]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "pre_delay": 500,
+    "timeout": 4000,
+    "next": ["点击获取六次观星奖励8", "星石背包已满"],
+    "on_error": ["stop"]
+  },
+  "点击获取六次观星奖励8": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "green_mask": true,
+        "threshold": 0.6,
+        "roi": [25, 13, 681, 674]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [633, 22, 19, 11]
+      }
+    },
+    "pre_delay": 500,
+    "post_delay": 1000,
+    "next": ["观星-自动分解提示", "观星-六次循环收取-第9轮"]
+  },
+  "观星-六次循环收取-第9轮": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [477, 831, 71, 96]
+      }
+    },
+    "repeat": 6,
+    "repeat_delay": 1000,
+    "timeout": 100,
+    "post_delay": 1250,
+    "next": ["铜钱不足", "观星-六次循环收取-第9轮收取"]
+  },
+  "观星-六次循环收取-第9轮收取": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "收取",
+        "roi": [87, 1155, 205, 75]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "pre_delay": 500,
+    "timeout": 4000,
+    "next": ["点击获取六次观星奖励9", "星石背包已满"],
+    "on_error": ["stop"]
+  },
+  "点击获取六次观星奖励9": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "green_mask": true,
+        "threshold": 0.6,
+        "roi": [25, 13, 681, 674]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [633, 22, 19, 11]
+      }
+    },
+    "pre_delay": 500,
+    "post_delay": 1000,
+    "next": ["观星-自动分解提示", "观星-六次循环收取-第10轮"]
+  },
+  "观星-六次循环收取-第10轮": {
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [477, 831, 71, 96]
+      }
+    },
+    "repeat": 6,
+    "repeat_delay": 1000,
+    "timeout": 100,
+    "post_delay": 1250,
+    "next": ["铜钱不足", "观星-六次循环收取-第10轮收取"]
+  },
+  "观星-六次循环收取-第10轮收取": {
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": "收取",
+        "roi": [87, 1155, 205, 75]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {}
+    },
+    "pre_delay": 500,
+    "timeout": 4000,
+    "next": ["点击获取六次观星奖励10", "星石背包已满"],
+    "on_error": ["stop"]
+  },
+  "点击获取六次观星奖励10": {
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": "common_reward.png",
+        "green_mask": true,
+        "threshold": 0.6,
+        "roi": [25, 13, 681, 674]
+      }
+    },
+    "action": {
+      "type": "Click",
+      "param": {
+        "target": [633, 22, 19, 11]
+      }
+    },
+    "pre_delay": 500,
+    "post_delay": 1000,
+    "next": ["[JumpBack]观星-自动分解提示"]
+  }
+}
