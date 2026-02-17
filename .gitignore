@@ -446,6 +446,9 @@ install
 
 # Tools
 tools/ImageCropper/**/*.png
+tools/ci/alist.local.env
+tools/ci/run_sync_with_alist.cmd
+tools/ci/run_sync_with_alist.ps1
 
 # venv
 .venv/
