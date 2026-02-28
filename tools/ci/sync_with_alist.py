@@ -19,10 +19,23 @@ SOURCE_DIR = "/Github"  # Alist 中挂载 GitHub Release 的路径
 MAX_RETRIES = 5  # 刷新缓存后的最大重试次数
 RETRY_DELAY = 30  # 每次重试的间隔时间（秒）
 
+# 蓝奏云允许的架构白名单
+LANZOU_ARCH_WHITELIST = ["aarch64", "x86_64"]
+
+
+def should_copy_to_lanzou(base_path, filename):
+    """检查文件是否应该复制到蓝奏云（只复制指定架构）"""
+    if "/蓝奏云/" not in base_path:
+        return True  # 非蓝奏云路径直接通过
+    filename_lower = filename.lower()
+    return any(arch in filename_lower for arch in LANZOU_ARCH_WHITELIST)
+
+
 # 定义你的分发规则
 # 规则格式：( (一个包含所有关键词的元组), [一个或多个目标目录的列表] )
 # 脚本会为每个匹配的文件，将其复制到列表中的所有目标目录
 DISTRIBUTION_RULES = [
+    # ===== 其他网盘：保持原有系统分类 =====
     # 公测版 (beta) 的规则
     (
         ("beta", "macos"),
@@ -30,7 +43,6 @@ DISTRIBUTION_RULES = [
             "/123云盘/公测版/Mac系统/",
             "/百度网盘/公测版/Mac系统/",
             "/夸克网盘/公测版/Mac系统/",
-            "/蓝奏云/公测版/Mac系统/",
         ],
     ),
     (
@@ -39,7 +51,6 @@ DISTRIBUTION_RULES = [
             "/123云盘/公测版/Win系统/",
             "/百度网盘/公测版/Win系统/",
             "/夸克网盘/公测版/Win系统/",
-            "/蓝奏云/公测版/Win系统/",
         ],
     ),
     # 稳定版 (文件名不含 "beta") 的规则
@@ -50,7 +61,6 @@ DISTRIBUTION_RULES = [
             "/123云盘/正式版/Mac系统/",
             "/百度网盘/正式版/Mac系统/",
             "/夸克网盘/正式版/Mac系统/",
-            "/蓝奏云/正式版/Mac系统/",
         ],
     ),
     (
@@ -59,9 +69,17 @@ DISTRIBUTION_RULES = [
             "/123云盘/正式版/Win系统/",
             "/百度网盘/正式版/Win系统/",
             "/夸克网盘/正式版/Win系统/",
-            "/蓝奏云/正式版/Win系统/",
         ],
     ),
+    # ===== 蓝奏云：按版本分总目录，只复制指定架构 =====
+    # 公测版 + aarch64 (Mac)
+    (("beta", "aarch64"), ["/蓝奏云/[公测版]/"]),
+    # 公测版 + x86_64 (Win)
+    (("beta", "x86_64"), ["/蓝奏云/[公测版]/"]),
+    # 正式版 + aarch64 (Mac)
+    (("aarch64",), ["/蓝奏云/[正式版]/"]),
+    # 正式版 + x86_64 (Win)
+    (("x86_64",), ["/蓝奏云/[正式版]/"]),
 ]
 
 # ---- 脚本核心逻辑 ----
@@ -338,6 +356,11 @@ def main():
 
                 # 规则 4: 遍历目标，创建目录并上传
                 for base_path in dest_paths:
+                    # 蓝奏云架构过滤
+                    if not should_copy_to_lanzou(base_path, filename):
+                        print(f"  - 跳过蓝奏云(架构不匹配): {filename}")
+                        continue
+
                     versioned_dest_path = f"{base_path.rstrip('/')}/{new_folder_name}"
 
                     if create_dir(token, versioned_dest_path):
