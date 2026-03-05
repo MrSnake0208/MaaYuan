@@ -126,7 +126,7 @@ jobs:
         id: download_mfa
         uses: robinraju/release-downloader@v1
         with:
-          repository: syoius/MFAAvalonia
+          repository: MrSnake0208/MFAAvalonia
           fileName: "MFAAvalonia-*-linux-${{ matrix.arch == 'x86_64' && 'x64' || 'arm64' }}*"
           latest: true
           out-file-path: "MFAAvalonia"
@@ -180,7 +180,7 @@ jobs:
         id: download_mfa
         uses: robinraju/release-downloader@v1
         with:
-          repository: syoius/MFAAvalonia
+          repository: MrSnake0208/MFAAvalonia
           fileName: "MFAAvalonia-*-osx-${{ matrix.arch == 'x86_64' && 'x64' || 'arm64' }}*"
           latest: true
           out-file-path: "MFAAvalonia"
